@@ -1,0 +1,24 @@
+Column,Type,Null,Default,Comments
+subject,character,Yes ,NULL ,subject id number 
+condition,factor,Yes ,NULL ,condition name 
+trial_number,integer,Yes ,NULL ,Trial Number 
+trial_index,integer,Yes ,NULL ,trial number 
+trial_event,factor,Yes ,NULL ,"event: practice_select_rdk - practice, select_rdk - task selection, rdk - random dot task "
+button_pressed,integer,Yes ,NULL ,which rdk selected 
+rt,numeric,Yes ,NULL ,response time 
+dot_direction,numeric,Yes ,NULL ,direction of rdk 
+dot_coherence,numeric,Yes ,NULL ,difficulty 
+key_press,integer,Yes ,NULL ,response  
+trial_duration,numeric,Yes ,NULL ,time remaining for choice 
+correct,numeric,Yes ,NULL ,"1 = correct, 0 = wrong "
+time_elapsed,numeric,Yes ,NULL ,total time elapsed 
+patch_0,numeric,Yes ,NULL ,W
+patch_1,numeric,Yes ,NULL ,NW
+patch_2,numeric,Yes ,NULL ,N
+patch_3,numeric,Yes ,NULL ,NE
+patch_4,numeric,Yes ,NULL ,E
+patch_5,numeric,Yes ,NULL ,SE
+patch_6,numeric,Yes ,NULL ,S
+patch_7,numeric,Yes ,NULL ,SW
+responses,character,Yes ,NULL ,Demographic information free text 
+uniqueid,character,Yes ,NULL ,SONA generated id 

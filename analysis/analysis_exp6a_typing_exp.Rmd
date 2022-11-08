@@ -1,0 +1,459 @@
+---
+title: "Experiment 6a: Typing paragraphs of different lengths [Exponential]"
+author: "knowlabUnimelb"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+Typing scheduler task.
+
+
+```{r load_modules4, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+rm(list=ls())
+library(tidyverse)
+library(workflowr)
+library(DescTools) # ConDisPairs looks useful
+library(gtools) 
+library(english)
+library(ggplot2)
+library(dplyr)
+library(hrbrthemes)
+library(knitr)
+library(reshape2)
+library(png)
+library(grid)
+library(lme4)
+library(rstatix)
+library(jpeg)
+library(purrr)
+library(emdist)
+library(readxl)
+library(pmr)
+```
+
+```{r load_data, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+runTypingAnalysis = TRUE # If TRUE, analysis the typing accuracy, rt, and wpm (takes time to load data)
+
+#define working directories
+inputdir <- "data"
+
+# Reading data and variable names 
+# The experiment was hosted on Google App Engine and the data are handled differently
+datafilename = "exp6a_typing_exponential.xlsx"
+
+datafn  <- paste(inputdir, datafilename,sep="/") 
+result  <- read_excel(datafn, sheet="selections", col_names = TRUE) 
+
+# Separate data
+data <- as.data.frame(result[result$phase != "demographics", ])
+demographics <- as.data.frame(result[result$phase == "demographics", ])
+
+data$phase = as.factor(data$phase)
+levels(data$phase)[levels(data$phase)=="experiment"] <- "deadline"
+levels(data$phase)[levels(data$phase)=="practice"] <- "untimed"
+data$phase <- factor(data$phase, levels = c("untimed", "deadline"))
+
+
+subjects = unique(data$subject)
+nsubjects = length(subjects)
+
+```
+
+In this study, we tested `r nsubjects` participants. Each participant complete four typing selection trials. On each trial, there were four typing tasks of different lengths. Participants had to choose the order in which to complete the typing tasks by clicking on a button to select the task and then typing out the presented paragraph. The four paragraphs differed in length with the medium task being twice as long as the shortest paragraph. The long task was twice as long as the medium pargraph. And the very long task was twice as long as the long task. 
+
+<!-- Add word counts -->
+
+For the first two trials, participants were given 300 seconds on each trial to complete all four tasks. On the second two deadline trials, participants were given 120 seconds to complete all four tasks. 
+
+```{r get_diff_selection_order, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+
+selection = cbind(data$selected1, data$selected2, data$selected3, data$selected4)
+location = cbind(data$patch_0, data$patch_1, data$patch_2, data$patch_3)
+
+diff_order = matrix(data = NA, nrow = nrow(selection), ncol = 4)
+for (i in 1:nrow(selection)){
+  diff_order[i, ] = location[i,selection[i,]+1]
+}
+
+```
+# Number of complete tasks
+
+The number of tasks completed in each phase indicates that the deadline had the intended effect.
+
+```{r task_completion_table, echo=FALSE, message=FALSE, warning=FALSE, results="asis"}
+completedTasks = 4-rowSums(is.na(diff_order))
+tdf = data.frame("phase" = data$phase, "completedTasks" = completedTasks)
+
+avgCompletions = aggregate(list("M" = tdf$completedTasks), by=list("Phase"=tdf$phase), FUN=mean)
+
+kable(avgCompletions, caption="Average number of correctly completed tasks in each phase")
+```
+
+# Typing difficulty
+
+We examined whether the typing tasks varied in difficulty as expected. 
+
+```{r typing_analysis, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# Reading data and variable names 
+typingfilename = datafilename
+options(digits=22)
+options(scipen = 10)
+#colfile       <- read.csv(paste(inputdir,"data_dictionary_pixel.csv",sep="/"), stringsAsFactors = FALSE)
+typingfn  <- paste(inputdir, typingfilename,sep="/") 
+
+#rt	trial_event	trial_type	trial_index	experiment	unique_id	browser_window_height	browser_window_width	patch_0	patch_1	patch_2	patch_3	trial_number	typed_times	typed_strings	typed_accuracy	wpm	difficulty
+
+
+# Separate data
+#typingresult  <- read.csv(typingfn, header = F, na.string="", numerals="no.loss", skip=0, nrows=1) 
+
+timecolstart = 14
+
+datalen = 770
+difficulty = rep(NA, datalen,1)
+wpm = rep(NA, datalen,1)
+avgRT = rep(NA, datalen,1)
+avgAccuracy = rep(NA, datalen,1)
+lengthrow = rep(NA, datalen,1)
+subject = rep(NA, datalen,1)
+order = matrix(NA, datalen, 4)
+trial = rep(NA, datalen, 1)
+subtrial = rep(NA, datalen, 1)
+
+pb <- txtProgressBar(min = 0, max = datalen, style = 3)
+for (i in 1:datalen){
+  #print(i)
+  typingresult <- read_excel(typingfn, sheet="typing", col_names=FALSE, skip=(i-1), n_max = 1, .name_repair = "minimal")
+  
+  # return only the typing data (omit NA's and starting columns)
+  firstna = (length(typingresult) - min(which(!is.na(rev(typingresult)))))
+  typing = typingresult[, timecolstart:(firstna + 1)] # all typing data: rts, text, accuracy, wpm, difficulty
+
+  # set a bunch of useful information
+  lengthrow[i] = length(typing) # how long is the data portion of the row
+  subject[i] = typingresult[[6]]  # subject number
+  order[i,1:4] = as.matrix(typingresult[1,9:12]) # difficulty order E, N, W, S
+  trial[i] = typingresult[[13]]   # what trial (0 or 1)
+  
+  # count the trials for each subject
+  if (i == 1){
+    cnt = 1 
+  } else if (i > 1 & subject[i] != subject[i-1]){
+    cnt = 1
+  } else {
+    cnt = cnt + 1
+  }
+  subtrial[i] = cnt  
+
+  
+  # the last entry is the difficulty
+  difficulty[i] = as.numeric(typing[length(typing)])
+  
+  # find the rts by finding the point at which the data classes change from numeric to character
+  classes = mapply(typing, FUN=class)
+  firstchar = min(which(classes == "character"))
+  typingrts = as.matrix(typing[1:(firstchar-1)])
+  avgRT[i] = mean(typingrts[2:length(typingrts)] - typingrts[1:(length(typingrts)-1)])
+  
+  # 
+  restofarray = typing[firstchar:length(typing)]
+  startOfWPM = (length(restofarray)-max(which(restofarray[(length(restofarray)-1):(length(restofarray)-length(typingrts))] > 1)))
+  wpms = as.matrix(restofarray[startOfWPM:(length(restofarray)-1)]) 
+  wpm[i] = wpms[length(wpms)]
+  
+  # isolate accuracy; this works because the length of accuracy should match the length of the rt vectory
+  accuracy = as.matrix(restofarray[(length(restofarray) - length(typingrts) - (length(restofarray)-startOfWPM)):(startOfWPM-1)])
+  avgAccuracy[i] = mean(accuracy)
+
+  # there is also the actual typed text but I'm ignoring that
+  
+  
+  setTxtProgressBar(pb, i)
+}
+close(pb)
+
+
+# Add a phase column
+subjs = unique(subject) # why are there fewer subjects here than for the selection data?
+phase = rep(NA, datalen)
+for (i in 1:length(subjs)){
+  x = trial[subject == subjs[i]]
+  p = rep(1, length(x))
+  p[(which((x[1:(length(x)-1)] - x[2:length(x)]) == 1)+1):length(x)] = 2
+  phase[subject == subjs[i]] = p
+}
+
+typing_data = t(as.matrix(rbind(subject, phase, trial, subtrial, difficulty, avgAccuracy, avgRT, wpm)))
+rownames(typing_data) = NULL
+colnames(typing_data) = c("sub", "phase", "trial", "cnt", "difficulty", "acc", "rt", "wpm")
+typing_data = as.data.frame(typing_data)
+
+options(digits=2)
+typing_analysis = aggregate(list("acc" = typing_data$acc, "rt" = typing_data$rt, "wpm" = typing_data$wpm), by = list("phase"=typing_data$phase), function(x)(round(mean(x, na.rm=TRUE), 2)))
+
+typing_analysis_std = aggregate(list("acc" = typing_data$acc, "rt" = typing_data$rt, "wpm" = typing_data$wpm), by = list("phase"=typing_data$phase), function(x)(round(sd(x, na.rm=TRUE), 2)))
+
+
+# [NEED TO ANALYSE THE ACCURACY, RT, AND WPM DATA USING A T-TEST (WITH PHASE AS THE INDEPENDENT VARIABLE)]
+
+```
+
+```{r typing_table, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+kable(typing_analysis, caption="Typing data analysis")
+
+```
+
+# Task selection
+
+
+The heatmaps show the marginal distribution of the ranks of each of the tasks; in other words, what are the proportions of each task chosen in each rank. These matrices indicate the proportions of responses for each difficulty level which were chosen first, second, third, or fourth, respectively. The matrix from a dataset in which choice is always optimal would have ones on the diagonal and zeros on the off-diagonal.
+
+
+```{r matrix_of_counts, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+selections = data.frame(subject = data$subject, phase = data$phase, selected_difficulty_1 = diff_order[,1], selected_difficulty_2 = diff_order[,2], selected_difficulty_3 = diff_order[,3], selected_difficulty_4 = diff_order[,4])
+
+fixed_untimed   = selections %>% filter(phase == "untimed") %>% select(selected_difficulty_1, selected_difficulty_2, selected_difficulty_3, selected_difficulty_4) %>% as.matrix()
+fixed_deadline  = selections %>% filter(phase == "deadline") %>% select(selected_difficulty_1, selected_difficulty_2, selected_difficulty_3, selected_difficulty_4) %>% as.matrix()
+
+imputeMissingData = function(data, n = numberOfTasks){
+  for (i in 1:n){
+      data[is.na(data[,i]), i] = mean(data[,i], na.rm=TRUE)
+  }
+  return(data)
+}
+
+numberOfTasks = 4
+fixed_untimed = imputeMissingData(fixed_untimed, numberOfTasks)
+fixed_deadline = imputeMissingData(fixed_deadline, numberOfTasks)
+
+fu = fixed_untimed %>% rankagg() %>% destat()
+fd = fixed_deadline %>% rankagg() %>% destat()
+```
+
+```{r heatmap_plot, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+
+# Convert to proportions
+setUpMat = function(matData){
+  mat = t(apply(matData, 1, function(x) x/sum(x)))  
+  matMelt = melt(mat)
+  names(matMelt) = c("Difficulty", "Order", "value")
+  return(matMelt)
+}
+fumelt = setUpMat(fu$mar)
+fdmelt = setUpMat(fd$mar)
+
+hm = rbind(cbind("condition" = rep("Fixed Untimed", nrow(fumelt)), fumelt), 
+           cbind("condition" = rep("Fixed Deadline", nrow(fdmelt)), fdmelt))
+
+hm$condition = factor(hm$condition, levels= c("Fixed Untimed", "Fixed Deadline"))
+
+hmplot = ggplot(hm, aes(x=Difficulty, y=Order)) +
+          geom_tile(aes(fill=value)) +
+          scale_fill_gradientn(colours=c("blue","pink", "red")) +
+          geom_text(aes(label=round(value, 2))) + 
+          scale_y_reverse() +
+          facet_wrap(~condition) + 
+          labs(y="Selection", x = "Difficulty")
+print(hmplot)
+
+```
+
+* Do the marginal distributions differ from uniformity?
+
+We tested whether the marginal distributions were different from uniformally random selection using the fact that the mean rank is distributed according to a  $\chi^2$ distribution with the following test-statistic:
+$$\chi^2 = \frac{12N}{k(k+1)}\sum_{j=1}^k \left(m_j - \frac{k+1}{2} \right)^2$$
+see (Marden, 1995). 
+
+```{r chi2uniformity, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+selection_n = selections %>% count(phase) 
+
+# Compare heatmaps to uniform
+observed <- fu$mean.rank
+
+chi2UniformRank = function(observed, n, k = numberOfTasks){
+  ex <- rep((k + 1)/2, k);
+  oc <- observed
+  
+  chi = (12 * n/(k * (k + 1))) * sum((oc - ex)^2) # Test statistic of mean rank under uniformity
+  p = dchisq(chi, k-1)
+  return(list("chi2" = chi, "chi2p" = p))
+}
+
+fu$uni <- chi2UniformRank(fu$mean.rank, selection_n$n[ selection_n$phase == "untimed"])
+fd$uni <- chi2UniformRank(fd$mean.rank, selection_n$n[selection_n$phase == "deadline"])
+
+chiUniformTable = data.frame("phase" = c("untimed", "deadline"), 
+                            "chi2" = round(c(fu$uni$chi2, fd$uni$chi2),2), 
+                            "df" = c(3,3),
+                            "p" = round(c(fu$uni$chi2p, fd$uni$chi2p), 2))
+
+knitr::kable(chiUniformTable, caption = "Chi2 test of uniformity")
+
+```
+
+
+It is evident at a glance that the ordering of choices is more optimal when the locations are fixed; that is, the proportions on the diagonal are higher. When the locations are fixed, choice order becomes more optimal under a deadline. By contrast, when locations are random, responding becomes _less_ optimal under a deadline. This likely reflects the additional costs of having to search for the appropriate task to complete. This search is minimised in the fixed location condition. 
+
+We compared the location conditions and phases using chi-2 analysis.
+
+```{r chi2btw, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+# Compare heatmaps to each other
+chi2_f_UvsD = chisq.test(cbind(as.vector(fu$mar),as.vector(fd$mar))) # Fixed: Untimed vs Deadline
+
+chi2compTable = data.frame("Comparison" = c("Fixed: Untimed vs Deadline"), 
+                           "chi2" = round(c(chi2_f_UvsD$statistic), 2),
+                           "df" = c(chi2_f_UvsD$parameter),
+                           "p"  = round(c(chi2_f_UvsD$p.value), 2))
+
+knitr::kable(chi2compTable, caption = "Pearson's chi-squared test")
+
+
+
+```
+
+```{r distcomp, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# Distance parameters
+maxdistance = (numberOfTasks * (numberOfTasks-1))/2
+missing_penalty = maxdistance/numberOfTasks
+allperms = permutations(n=4, r=4, v=1:4, repeats.allowed=FALSE)
+nperms = nrow(allperms)
+
+# Compute distance from optimal for all perms
+pdist <- rep(NA, nperms)
+for (i in 1:nperms){
+  distObj = ConDisPairs(table(allperms[i, ], c(1,2,3, 4)))
+  pdist[i] = distObj$D  
+}
+
+# Find average distance based on all partial matches
+scorePartialMatches = function(sv, allperms, pdist){
+    selVector = as.numeric(sv)
+    if (all(is.na(selVector))){ # If no tasks are selected
+      avgd = mean(pdist)
+      mind = min(pdist)
+      maxd = max(pdist)      
+    } else {
+      if (sum(!is.na(selVector)) > 1){ # If more than one task is selected
+        dvec = pdist[apply(t(replicate(nperms, selVector[!is.na(selVector)])) == allperms[, !is.na(selVector)], 1, function(x)all(x))]
+      } else { # If only one task is selected
+        dvec = pdist[selVector[!is.na(selVector)] == allperms[, !is.na(selVector)]]
+      }
+      avgd = mean(dvec)
+      mind = min(dvec)
+      maxd = max(dvec)
+    }
+    return(list("avgD" = avgd, "minD" = mind, "maxD" = maxd))
+}
+
+# Add average distance column
+selections = selections %>% mutate("avgD" = apply(selections %>% select(selected_difficulty_1, selected_difficulty_2, selected_difficulty_3, selected_difficulty_4), 1, function(x)(scorePartialMatches(x, allperms, pdist)$avgD)))
+
+# Add min distance column
+selections = selections %>% mutate("minD" = apply(selections %>% select(selected_difficulty_1, selected_difficulty_2, selected_difficulty_3, selected_difficulty_4), 1, function(x)(scorePartialMatches(x, allperms, pdist)$minD)))
+
+# Add max distance column
+selections = selections %>% mutate("maxD" = apply(selections %>% select(selected_difficulty_1, selected_difficulty_2, selected_difficulty_3, selected_difficulty_4), 1, function(x)(scorePartialMatches(x, allperms, pdist)$maxD)))
+
+```
+
+# Selection Optimality
+* How optimal were responses? 
+
+The next analysis computed the distance between the selected order and the optimal order (easiest to very hard for that trial), which ranges between 0 (perfect match) and 6 (maximally distant), for 4 options. 
+
+What we want is the distance of the selected options from the optimal solutions, which is the edit distance (or number of discordant pairs) between orders. However, because a participant may run out of time, there may be missing values. To handle these values, for each trial, we find the orders which partially match the selected order and compute three the average distance of those possible orders and the optimal solution (*avg_distance*). 
+
+The following figure compares the avg_distance between the fixed difficulty and random difficulty conditions as a function of deadline condition and phase. For each of these measures, lower values reflect respones which are closer to optimal.
+
+```{r plotData, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+# max_plot <- avg_maxdata %>% ggplot(aes(x=avg, fill=phase)) + geom_histogram(color="white", alpha=0.6, bins = 10, position="identity") + facet_wrap(~condition+phase) + labs(y="Frequency", x = "Max Distance")
+# print(max_plot + ggtitle("Max Distance"))
+# 
+# min_plot <- avg_mindata %>% ggplot(aes(x=avg, fill=phase)) + geom_histogram(color="white", alpha=0.6, bins = 10, position="identity") + facet_wrap(~condition+phase) + labs(y="Frequency", x = "Min Distance")
+# print(min_plot + ggtitle("Min Distance"))
+
+avg_plot <- selections %>% ggplot(aes(x=avgD, fill=phase)) + geom_histogram(aes(y=..density..), color="white", alpha=0.6, bins = 6, position="identity", breaks=seq(0,6,by=1)) + facet_wrap(~phase) + labs(y="Probability", x = "Avg Distance")
+print(avg_plot + ggtitle("Avg Distance"))
+
+
+avg_ks = ks.test(selections$avgD[selections$phase == "untimed"], selections$avgD[selections$phase == "deadline"])
+print(avg_ks)
+
+```
+
+
+# Selection model
+
+We can treat each task selection as a probabilistic choice given by a Luce's choice rule (Luce, 1959), where each task is represented by some strength, $\nu$. The probability of selecting task $i_j$ from set $S = \left{i_1, i_2, ..., i_J \right}$, where J is the number of tasks, is:
+
+$$p\left(i_j |S \right) = \frac{\nu_{i_j}}{\sum_{i \in S} \nu_{i}} $$.
+
+Plackett (1975) generalised this model to explain the distribution over a sequence of choices (i.e., ranks). In this case, after each choice, the choice set is reduce by one (i.e., sampling without replacement). This probability of observing a specific selection order, $i_1 \succ ... \succ i_J$ is:
+
+$$p\left(i_j |A \right) = \prod_{j=1}^J \frac{\nu_{i_j}}{\sum_{i \in A_j} \nu_{i}} $$, 
+
+where $A_j$ is the current choice set.
+
+
+```{r PLmodel, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+
+# Estimate Plackett-Luce model parameters
+fu.pl = fixed_untimed %>% rankagg() %>% pl() # use fd.pl@details to access results
+fd.pl = fixed_deadline %>% rankagg() %>% pl()
+
+
+slopeLP = function(coef){
+    # Fit a line to the coefficients
+    df = data.frame('diff' = seq(4,1), 'x' = coef)
+    lmod = lm(x ~ diff, df)
+    slope = round(lmod$coefficients['diff'], 4)
+    return("slope" = slope)
+}
+
+PlackettLuceParms = data.frame("phase" = c("untimed", "deadline"), 
+                              "Easy" = round(c(fu.pl@coef[1], fd.pl@coef[1]),2),
+                              "Med" = round(c(fu.pl@coef[2], fd.pl@coef[2]),2),
+                              "Hard" = round(c(fu.pl@coef[3], fd.pl@coef[3]),2),
+                              "V. Hard" = round(c(fu.pl@coef[4], fd.pl@coef[4]),2), 
+                              "Slope" = c(slopeLP(fu.pl@coef), slopeLP(fd.pl@coef)))
+knitr::kable(PlackettLuceParms, caption = "Plackett-Luce strength parameter estimates")
+
+
+plSample = function(coefs){
+  coefs[coefs<0] <- 0
+  J = length(coefs)
+  A = 1:J
+  v = coefs/sum(coefs)
+  s = rep(NA, J)
+  for (i in 1:(J-1)){
+    s[i] = sample(A, 1, prob=v)
+    v = v[A!=s[i]]
+    v = v/sum(v)
+    A = A[A!=s[i]]
+  }
+  s[J] = A
+  return(s)
+}
+
+plSamples = function(coefs, n){
+    s = matrix(NA, n, 4)
+    for (i in 1:n){
+        s[i,] = as.matrix(plSample(coefs))
+    }
+    return(s)
+}
+
+# TODO: Sample selection orders using pl coefficients
+nsim = 10000
+sim_pl = data.frame("phase" = c(rep("untimed", nsim), rep("deadline", nsim)),
+                    "sim" = rbind(plSamples(fu.pl@coef, nsim), plSamples(fd.pl@coef, nsim)))
+sim_pl$phase <- factor(sim_pl$phase, levels=c('untimed', 'deadline'))
+
+# Add average distance column
+sim_pl = sim_pl %>% mutate("avgD" = apply(sim_pl %>% select(sim.1, sim.2, sim.3, sim.4), 1, function(x)(scorePartialMatches(x, allperms, pdist)$avgD)))
+
+#       Compare resulting distribution with data
+sim_avg_plot <- sim_pl %>% ggplot(aes(x=avgD, fill=phase)) + geom_histogram(aes(y=..density..), color="white", alpha=0.6, bins = 6, position="identity", breaks=seq(0,6,by=1)) + facet_wrap(~phase) + labs(y="Probability", x = "Avg Distance")
+print(sim_avg_plot + ggtitle("Avg Distance - Plackett-Luce Model"))
+```

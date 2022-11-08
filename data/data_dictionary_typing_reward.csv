@@ -1,0 +1,26 @@
+Column,Type,Null,Default,Comments
+experiment,character,Yes,NULL,
+condition,character,Yes,NULL,
+subject,integer,Yes,NULL,subject id number
+unique_id,integer,Yes,NULL,
+trial_number,integer,Yes,NULL,
+trial_index,integer,Yes,NULL,
+trial_event,factor,Yes,NULL,
+selected_difficulty,numeric,Yes,NULL,"Difficulty of selected rdk: 0 = easy, 1 = med, ..."
+rt,numeric,Yes,NULL,
+difficulty,numeric,Yes,NULL,
+typed_accuracy,character,Yes,NULL,
+typed_strings,character,Yes,NULL,
+typed_times,character,Yes,NULL,
+average,numeric,Yes,NULL,average_wpm
+patch_0,numeric,Yes,NULL,
+patch_1,numeric,Yes,NULL,
+patch_2,numeric,Yes,NULL,
+patch_3,numeric,Yes,NULL,
+score,numeric,Yes,NULL,wordle guess score
+stimulus_string,character,Yes,NULL,wordle clues
+target_string,character,Yes,NULL,wordle target
+responses,character,Yes,NULL,Demographic information free text; wordle responses
+browser_window_height,numeric,Yes,NULL,
+browser_window_width,numeric,Yes,NULL,
+start_date,character,Yes,NULL,date and time of initial start

@@ -1,11 +1,133 @@
 ---
-title: "Home"
+title: "Human scheduling of perceptual and behavioural tasks"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
-    toc: false
+    toc: true
 editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+(REP Title: Prioritizing Dot Discrimination Tasks or Prioritizing Typing Tasks)
+
+Daniel R. Little^1^, Ami Eidels^2^, and Deborah J. Lin^1^
+
+^1^ The University of Melbourne, ^2^ The University of Newcastle
+
+# Scheduling Project
+
+Preregistration of our hypotheses and data analysis plan are available here: 
+
+* [Preregistration Document v1](prereg.html)  
+* [Preregistration Document v2](prereg_v2.html) 
+* [Preregistration Document v3](prereg_v3.html) 
+* [OSF](https://osf.io/3kfh6/)
+
+
+# Overview
+
+Scheduling theory is concerned with the development of policies which determine the “optimal allocation of resources, over time, to a set of tasks” (Parker, 1995). Scheduling problems have been studied extensively in the context of operations research and computer science, where optimal policies have been established for many cases. However, almost no research has examined how cognitive and perceptual mechanisms perform with respect to these optimal policies. 
+
+For many types of goals, such as minimizing the number of tasks completed after a deadline or completing as many tasks as possible in a given length of time, an optimal schedule can be determined (Chretienne et al., 1995). In the first set of studies, we are focused on the scheduling of tasks that vary in difficulty where the goal is to complete as many tasks as possible prior to the deadline. In this case, it is optimal to complete subtasks in order of shortest to longest completion time. In the second set of studies, we additionally vary reward, and prompt participants to maximize the total value of the subtasks completed in the allotted time. With this goal, the optimal strategy is to balance reward against difficulty, creating an index based on reward rate and completing the tasks in order of this index. 
+
+We conducted a number of experiments in which we controlled the difficulty of each subtask by requiring perceptual decisions or behavioral actions with known properties. For example, each subtask may be a Random Dot Kinematogram (RDK). In an RDK, dots are moving across an aperture on the screen in a pseudo-random fashion. The participant must to determine whether more dots are moving coherently to the right or to the left. Multiple RDK patches will be presented on the selection screen. Participants will click on the RDK they want to complete, indicate the direction of motion in that patch, and then return to the main screen to select the next RDK. The RDK's will vary in coherence and consequently, difficulty and average completion time (Ludwig & Evens, 2017). In other experiments, we use a different perceptual judgment task or a typing task requiring typing passages of different lengths.
+
+All experiments were completed online. In all experiments, each subtask varied in diffculty, either by manipulating the coherence of the RDK, by manipulating the ease of the brightness judgement, or by varying the length of the typing task. Patches varied from Very Easy to Very Hard. In most experiments, text labels were presented on each patch so that the difficulty could be discerned without viewing the subtask. In other experiments, difficulty had to be judged by previewing the task. 
+
+# Experiment Set 1: Different Levels of Difficulty, Equal Reward Value
+
+In this set of experiments, we compare how tasks of different difficulty but equal reward value are scheduled across a number of conditions. In Experiments 1 and 2, we examine tasks which are labelled with their corresponding difficulty. In Experiment 3, we test scheduling when the difficulty information is conveyed dynamically (i.e., participants can view the tasks before selecting it). Experiment 4 examines scheduling with eight subtasks, instead of four as in the other experiments. Experiment 5 examines a different perceptual judgment task: brightness discrimination. Finally, Experiment 6 examines how people schedule typing tasks of different length. 
+
+## [Experiment 1](analysis_exp1_labelled_nodelay.html): *Four Labelled RDK Subtasks with No Error Penalty* 
+
+In this experiment, there were two conditions, one using fixed locations of task difficulty on each trial and one using random locations of task difficulty on each trial. In each condition, subjects completed several trials selecting and completing RDK tasks when there was no deadline for completing all of the subtasks and where there was a six second deadline for completing all of the subtasks. There were four subtasks varying from Easy to Very Hard, labelled with a text label. When an error was made on the RDK task, the direction of the RDK was immediately restarted with a potentially new sampled direction. 
+
+## [Experiment 2](analysis_exp2a_labelled_delay.html): *Four Labelled RDK Subtasks with Error Delay* 
+
+This experiment was identical to Experiment 1, with one exception. When an error was made on the RDK direction judgment, a 500 msec delay was inserted before resampling the RDK direction and restarting the RDK motion. Both fixed and random location conditions were used. 
+
+## [Experiment 2b](analysis_exp2b_avgTimelabelled_delay.html): *Four Labelled RDK Subtasks with Error Delay* 
+
+This experiment was identical to Experiment 2 but with the labels changed from "easy", "hard", etc to the average completion time (msec) from Experiment 2. 
+
+# Dynamically varying tasks
+
+In contrast to Experiments 1 and 2, in Experiment 3 no difficulty labels were provided. Instead, all four RDk's moved on the selection screen at their given coherence level. Once selected, the direction was randomly resampled and the unselected tasks either stopped moving or (in Experiment 3b) the selected task was highlighted. 
+
+## [Experiment 3a](analysis_exp3a_rdk_dynamic_delay.html): *Four Dynamic RDK's with Error Delay*
+
+In this experiment, we removed the text labels and allowed each RDK to continue moving (at its given coherence) on the selection screen. Once an RDK was selected the non-selected RDK's would stop and the direction of the selected RDK was resampled. 
+
+## [Experiment 3b](analysis_exp3b_rdk_dynamic_delay_highlight): *Four Dynamic RDK's with Error Delay and Highlighting*
+
+This experiment is identical to Experiment 6, but once an RDK was selected, it was highlighted by a bounding box, the non-selected RDK's continued moving, and the direction of the selected RDK was resampled. 
+
+## [Experiment 3c](analysis_exp3c_rdk_dynamic_delay_shortdotlife.html): *Four Dynamic RDK's with Error Delay, Short Dot Life*
+
+This experiment is identical to Experiment 6 but with the RDK dots set to disappear after a short number of frames (rather than at the boundary).
+
+# Increasing the number of tasks
+
+## [Experiment 4](analysis_exp4_8tasks_labelled_delay.html): *Eight Labelled RDK Subtasks with Error Delay* 
+
+In this experiment, we increased the number of RDK subtasks to eight. In the deadline condition, a 10 second deadline was applied.  Only the fixed location condition was tested.
+
+# Alternative Perceptual Judgment
+
+## [Experiment 5a](analysis_exp5a_labelled_pixel_delay.html): *Four Labelled Pixel Brightness Subtasks with Error Delay* 
+
+In this experiment, we substituted an pixel brightness judgment for each RDK subtask. In the pixel brightness subtask, participants had to judge whether the number of black pixels in a 100 x 100 patch were greater or less than 50%. We again only tested the fixed location condition with a 500 msec delay after an error before the patch was resampled. 
+
+## [Experiment 5b](analysis_exp5b_displayed_pixel_delay_uon.html): *Four Displayed Pixel Brightness Subtasks with Error Delay* 
+
+In this experiment, we presented four pixel brightness judgments. Participants could see each patch brightness. Once selected, the pixels were resampled at the same level. Here we tested both fixed and random locations. 
+
+# Typing tasks
+
+## [Experiment 6a](analysis_typing_exp.html): *Four Typing Tasks of exponentially varying length*
+
+In this experiment, participants typed out paragraphs of differing length. Length was varied exponentially across paragraphs.
+
+## [Experiment 6b](analysis_typing_linear.html): *Four Typing Tasks of linearly varying length*
+
+In this experiment, participants typed out paragraphs of differing length. Length was varied linearly across paragraphs.
+
+# Experiment Set 2: Different Levels of Difficulty, Different Reward 
+
+In Experiment Set 2, we again examine how people schedule tasks that vary in difficulty but we add reward as an additional factor. In all experiments, the reward varies with difficulty such that more difficult tasks incur larger rewards. We instantiated reward in two ways: first, we adapted the popular Wordle game to provide participants with clues to a missing target word that they attempted to guess after each scheduling trial. Completing subtasks rewarded participants with clues of different informativeness. Experiment 7 tested random dot motion while Experiment 8 examined typing word lists of different length. In Experiments 7e and 8e, each task was allocated a point value and participants accumulated points across trials by completing different subtasks. 
+
+## Random Dot Motion
+
+## [Experiment 7a](analysis_exp7a_rdk_no_reward.html): *Replication of Experiment 2 Fixed Location Condition* 
+## [Experiment 7b](analysis_exp7b_rdk_reward.html): *Word Game Reward* 
+## [Experiment 7c](analysis_exp7c_rdk_reward_instructions.html): *Word Game Reward + Instructions* 
+## [Experiment 7d](analysis_exp7d_rdk_reward_keyboard.html): *Word Game Reward + Instructions + Letter Keyboard* 
+## [Experiment 7e](analysis_exp7e_rdk_reward_points.html): *Point Reward* 
+
+## Typing tasks
+
+## [Experiment 8a](analysis_exp8a_typing_no_reward.html): *Replication of Experiment 2 Fixed Location Condition* 
+## [Experiment 8b](analysis_exp8b_typing_reward.html): *Word Game Reward* 
+## [Experiment 8c](analysis_exp8c_typing_reward_instructions.html): *Word Game Reward + Instructions* 
+## [Experiment 8d](analysis_exp8d_typing_reward_keyboard.html): *Word Game Reward + Instructions + Letter Keyboard* 
+## [Experiment 8e](analysis_exp8e_typing_reward_points.html): *Point Reward* 
+
+
+<!-- Make changes to files: --> 
+
+<!-- wflow_publish(c('analysis/index.Rmd', 'analysis/analysis_exp1_labelled_nodelay.Rmd', 'data/exp1_fixed_rdk_data.csv'), message="update analysis files", republish = TRUE) -->
+<!-- Note that if any of the files fail, then you need to run the whole thing again -->
+
+<!-- wflow_git_push() won't work because of the authentication so use the terminal
+git push -u origin master -->
+
+<!-- Note: once this is done, I had to update index.Rmd separately)-->
+<!--wflow_publish(c('analysis/index.Rmd'), message="update main file")-->
+
+
+<!-- ## Experiments to analyses -->
+<!-- Select tasks in order:210921_random_moving_selectiononly_data.csv  -->
+<!-- Typing Random order -->
+
+
+

@@ -1,0 +1,1052 @@
+---
+title: "Experiment 5a: Pixel Brightness Judgement, 4 Tasks, 500 msec Error Penalty"
+author: "knowlabUnimelb"
+date: "2020-10-29"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+Daniel R. Little^1^, Ami Eidels^2^, and Deborah J. Lin^1^
+
+
+^1^ The University of Melbourne, ^2^ The University of Newcastle
+
+```{r load_modules, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+library(tidyverse)
+library(workflowr)
+#library(Rankcluster)
+#library(rankdist) # Crashes rStudio
+#library(Kendall)
+library(DescTools) # ConDisPairs looks useful
+library(gtools) 
+library(english)
+library(ggplot2)
+library(dplyr)
+library(hrbrthemes)
+library(knitr)
+library(reshape2)
+library(png)
+library(grid)
+library(lme4)
+library(rstatix)
+library(jpeg)
+library(pmr)
+```
+
+```{r load_data, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+rm(list=ls())
+
+#define working directories
+inputdir <- "data"
+
+# Reading data and variable names 
+fixed_datafilename = "exp5a_pixel_data.csv"
+
+colfile       <- read.csv(paste(inputdir,"data_dictionary_pixel.csv",sep="/"), stringsAsFactors = FALSE)
+fixed_datafn  <- paste(inputdir,fixed_datafilename,sep="/") 
+rawdata  <- read.csv(fixed_datafn, header = FALSE, col.names = colfile$Column, colClasses = colfile$Type, stringsAsFactors = FALSE, na.strings="NA") # Add column labels to data
+
+# odd problem with uniqueid 26323 so remove it (trials are interspersed weirdly)
+rawdata = rawdata[rawdata$uniqueid != 26323, ]
+
+# Handful of subjects who partially completed the experiment without an id, remove them
+rawdata = rawdata[!is.na(rawdata$uniqueid), ]
+
+# Fix some specific information here
+levels(rawdata$condition) = c("fixed") # Relabel to make easier to type
+rawdata$correct[is.na(rawdata$correct)] = 0 # Incorrect trials were recorded as NA
+
+# Summary data
+loggedSubjects = rawdata %>% distinct(condition, uniqueid)
+nLoggedSubjects = rawdata %>% distinct(condition, uniqueid) %>% count(condition)
+
+```
+
+```{r data_cleaning, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+
+# Separate demographic information from data
+uncleandata = rawdata[rawdata$trial_event != "demographics", ]
+
+# A full data set has 10 practice trials (0 to 9) and 30 deadline trials (0 to 29)
+# A full data set will have a max trial number of 29 
+nTotalTrials = 29 # Counting from trial 0
+
+completeSubjects = uncleandata[uncleandata$trial_number == nTotalTrials, ] %>% distinct(condition, subject)
+nCompleteSubjects = uncleandata[uncleandata$trial_number == nTotalTrials, ] %>% distinct(condition, subject) %>% count(condition)
+
+# Keep only complete datasets
+cleandata = uncleandata[uncleandata$subject %in% completeSubjects$subject, ]
+
+# some subjects may have completed the experiment twice, keep only first completion
+completionIds = cleandata %>% distinct(uniqueid, subject)
+completionCounts = cleandata %>% distinct(uniqueid, subject) %>% count(uniqueid)
+repeatedIds = completionCounts$uniqueid[completionCounts$n > 1]
+
+toDeleteSecondEntry = completionIds[completionIds$uniqueid %in% repeatedIds, ] %>% filter(duplicated(uniqueid))
+keeplist = anti_join(completionIds, toDeleteSecondEntry)
+
+# keep only nonrepeated subs
+cleandata = cleandata[cleandata$subject %in% keeplist$subject, ]
+subjects = cleandata %>% distinct(condition, uniqueid)
+nSubjects = cleandata %>% distinct(condition, uniqueid) %>% count(condition)
+
+```
+
+```{r add_phase_col, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+
+# Add in phase column which indicates whether current trials are practice or experiment
+add_phase_col = function(data, subs){
+  nSubs = length(subs)
+  data$phase = rep(NA, nrow(data))
+  for (i in 1:nSubs){
+    
+    # Find point at which trial_index = 0 later in the trial
+    tidx = which(data$trial_number[data$uniqueid == subs[i]] == 0)
+    idx = tidx[which(diff(tidx) > 1) + 1]
+    
+    dsize = nrow(data[data$uniqueid == subs[i], ])
+    data$phase[data$uniqueid == subs[i]] = c(rep(0, idx-1), rep(1,length(idx:dsize)))
+  }
+  return(data)
+}
+cleandata = add_phase_col(cleandata, subjects$uniqueid)
+cleandata$phase = as.factor(cleandata$phase)
+levels(cleandata$phase) = c("untimed", "deadline")
+
+
+```
+
+```{r emails, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# Need to extract emails for sending results from all datasets
+# Turned off due to ethics
+
+demographics = rawdata[rawdata$trial_event == "demographics", ]
+#emails = demographics[grep("Email", demographics)]
+#colon_loc = gregexpr(pattern = ":", emails)
+#full_email_list = rep(NA, nSubjects)
+#for (i in 1:nSubjects){
+#  if (!is.na(emails[i])){
+#    full_email_list[i] = substr(emails[i], colon_loc[[i]][1]+2, nchar(emails[i])-2)
+#  }
+#}
+#email_list = str_sort(full_email_list[full_email_list != "" & !is.na(full_email_list)])
+
+```
+
+```{r demographics, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# Demographics
+# trial_event = sex_age
+# responses --> Gender and Age
+
+sexage = demographics$responses[grep("Gender", demographics$responses)]
+  
+colon_loc = gregexpr(pattern = ":", sexage)
+comma_loc = gregexpr(pattern = ",", sexage)
+
+nSubs = sum(nSubjects$n)  
+sex = rep(NA, nSubs)
+age = rep(NA, nSubs)
+for (i in 1:nSubs){
+  sex[i] = toupper(substr(sexage[i], colon_loc[[i]][1]+2, comma_loc[[i]][1]-2))
+  
+  x = substr(sexage[i], colon_loc[[i]][2]+2, nchar(sexage[i])-2)
+  if (nchar(x) == 2){
+    age[i] = as.numeric(x)
+  } else {
+    age[i] = as.numeric(substr(sexage[i], colon_loc[[i]][2]+2, colon_loc[[i]][2]+4))    
+  }
+}
+
+demo_data = subjects %>% mutate(age, sex)  
+
+nFemales = demo_data %>% filter(sex == "FEMALE" | sex == "WOMEN") %>% distinct(condition, uniqueid) %>% count(condition)
+nMales   = demo_data %>% filter(sex == "MALE") %>% distinct(condition, uniqueid) %>% count(condition)
+nUnspec  = demo_data %>% filter(sex != "FEMALE" & sex != "WOMEN" & sex != "MALE") %>% distinct(condition, uniqueid) %>% count(condition)
+ 
+meanAge = demo_data %>% group_by(condition) %>% summarise(mean = mean(age, na.rm = TRUE))
+stdAge = demo_data %>% group_by(condition) %>% summarise(sd = sd(age, na.rm = TRUE))
+
+```
+# Method
+
+## Participants
+
+We tested `r sum(nSubjects$n)` participants (`r sum(nFemales$n)` F, `r sum(nMales$n)` M, `r sum(nUnspec$n)` Undeclared). Participants were recruited through the Melbourne School of Psychological Sciences Research Experience Pool (Mean age = `r round(mean(age, na.rm=TRUE),2) `, range = `r min(age, na.rm=TRUE) ` - `r max(age, na.rm=TRUE)`). Participants were reimbursed with credit toward completion of a first year psychology subject. Datasets from `r length(repeatedIds)` subjects were excluded for completing the experiment twice; i.e., only the first of the datasets for these subjects was retained.
+
+`r paste(toupper(substring(english(nSubjects$n[nSubjects$condition == "fixed"]), 1, 1)), substring(english(nSubjects$n[nSubjects$condition == "fixed"]), 2), sep="")` were assigned to the _Fixed Difficulty_ condition. In this condition, the location of easy, medium, hard, and very hard random dot kinematograms (RDK's) was held constant across trials. 
+
+`r paste(toupper(substring(english(nSubjects$n[nSubjects$condition == "random"]), 1, 1)), substring(english(nSubjects$n[nSubjects$condition == "random"]), 2), sep="")` were assigned to the _Random Difficulty_ condition. In this condition, the location of easy, medium, hard, and very hard random dot kinematograms (RDK's) were randomized from trial to trial. 
+
+The Fixed Difficulty experiment was completed before the Random Difficulty experiment. Participants only completed one of these.
+
+
+## Design
+
+```{r getCoherenceSet, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# Get all coherence options
+# 1 = easy, 2 = medium, 3 = hard, 4 = very_hard
+coherence_set = sort(unique(c(cleandata$patch_0, cleandata$patch_1, cleandata$patch_2, cleandata$patch_3)), decreasing = FALSE)
+
+```
+
+In each condition, participants completed multiple trials in which they selected and completed RDK tasks. On each trial, participants were shown a set of four RDKs labelled Easy, Medium, Hard, and Very Hard. The labels corresponded to the cohenrence of the RDK; that is, the proportion of dots moving in a coherent direction was set to 80%, 50%, 20%, and 0% for the Easy, Medium, Hard, and Very Hard locations, respectively. From the set of four RDKs, participants selected and completed one RDK at a time in any order. The goal of each trial was to complete as many as possible before a deadline. If an incorrect RDK response was made, that RDK was restarted at the same coherence but with a resampled direction (so the direction may have changed), and the participant had to respond to the RDK again. A new task could not be selected until the RDK was completed successfully.
+
+```{r taskImage, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+# img <- readPNG("analysis/patch_selection.png")
+# g <- rasterGrob(img, interpolate=TRUE)
+# 
+# qplot() +
+#   annotation_custom(g, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) 
+```
+
+Participants first completed 10 trials with a long (30 sec) deadline to help participants learn the task, explore strategies, and allow for comparison to a short-deadline condition. We term this the _no deadline_ condition since the provided time is well beyond what is necessary to complete all four RDK's. Next, participants completed 30 trials with a 6 second deadline.
+
+_Data Cleaning_
+
+Subjects completed the experiment by clicking a link with the uniquely generated id code. Subjects were able to use the link multiple times; further, subjects were able to exit the experiment at any time. Consequently, the datafile contains partially completed data for some subjects which needed to be identified and removed. 
+
+
+```{r analyse_RDK_difficulty, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+rdk = cleandata %>% filter(trial_event == 'subtask')
+
+# Total rdk timeouts
+nTimeouts = rdk %>% filter(rt == -1) %>% count()
+pTimeouts = nTimeouts$n/nrow(rdk)
+
+# Timeouts by subject
+timeoutsPerSubject = rdk %>% filter(rt == -1) %>% count(uniqueid)
+avgTimeoutPerSubject = mean(timeoutsPerSubject$n)
+
+# Remove rdk timeouts
+rdk = rdk %>% filter(rt != -1) 
+
+# Analyse long rts
+longRTcutoff = 3000
+nlongrts = rdk %>% filter(rt > longRTcutoff) %>% count(phase)
+
+# Remove long rts
+# rdk = rdk %>% filter(rt <= longRTcutoff)
+
+```
+
+```{r identify_nonlearners, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+
+easyacc = rdk %>% filter(dot_difficulty == 1) %>% group_by(phase, uniqueid) %>% summarise(mean = mean(correct))
+nonlearners = easyacc %>% filter(mean < .4)
+nNonlearners = nonlearners$uniqueid %>% unique() %>% length()
+
+# Remove nonlearners
+data = cleandata %>% filter(!uniqueid %in% nonlearners$uniqueid)
+rdk = rdk %>% filter(!uniqueid %in% nonlearners$uniqueid)
+
+# Count remaining subjects
+finalSubjects = data %>% distinct(uniqueid)
+final_n = data %>% distinct(condition, uniqueid) %>% count(condition)
+
+```
+
+A handful of subjects (N = `r nNonlearners`) had less than chance accuracy on the easiest RDK indicating equipment problems or a misunderstanding of task directions. We removed these participants from further anlaysis leaving `r final_n$n[final_n$condition == "fixed"]` and `r final_n$n[final_n$condition == "random"]` in the fixed and random location conditions, respectively.
+
+```{r task_completion, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# tcdata = aggregate(rdk$trial_event[rdk$correct == 1], by=list("condition" = rdk$condition[rdk$correct == 1], "trial" = rdk$trial_number[rdk$correct == 1], "phase" = rdk$phase[rdk$correct == 1], "subject" = rdk$uniqueid[rdk$correct == 1]), FUN=length)
+
+tcdata = rdk %>% filter(correct == 1) %>% group_by(condition, trial_number, phase, uniqueid) %>% count()
+avgCompletions = rdk %>% filter(correct == 1) %>% group_by(condition, trial_number, phase, uniqueid) %>% count() %>% group_by(condition, phase) %>% summarise(mean = mean(n, na.rm=TRUE))
+
+```
+
+# Data Analysis
+
+We first summarize performance by answering the following questions: 
+
+## Task completions
+
+* How many tasks are completed on average?
+
+Across both conditions, participants completed `r round(mean(avgCompletions$mean[avgCompletions$phase == "untimed"]),2)` tasks during the `r as.character(avgCompletions$Phase[1])` phase and `r round(mean(avgCompletions$mean[avgCompletions$Phase == "deadline"]),2)` tasks during the `r as.character(avgCompletions$Phase[2])` phase. 
+
+```{r task_completion_table, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+# Reorder columns
+avgCompletions = avgCompletions[c("condition", "phase", "mean")]
+kable(avgCompletions, caption="Average number of correctly completed tasks in each condition")
+```
+
+```{r task_completion_analysis, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# TODO: Rewrite using tidyverse
+tc.aov = aov(n ~ phase, data = tcdata)
+tc.ml0 = lm(n ~ phase, data = tcdata)
+tc.ml1 = lmer(n ~ phase + (1|uniqueid), data = tcdata)
+
+# Comparison indicates that tc.ml2 is the preferred model on a BIC basis
+tc.ml1.summary = summary(tc.ml1)
+
+```
+
+
+## RDK performance
+
+```{r rdk_anova, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# TODO: Rewrite using tidyverse
+aov.acc.data = aggregate(list("accuracy" = rdk$correct), by = list("subject" = rdk$uniqueid, "phase" = rdk$phase, "difficulty" = rdk$dot_difficulty), FUN = function(x) mean(x, na.rm=TRUE))
+
+aov.rt.data = aggregate(list("rt" = rdk$rt), by = list("subject" = rdk$subject, "phase" = rdk$phase, "difficulty" = rdk$dot_difficulty), FUN = function(x) mean(x, na.rm=TRUE))
+
+# Note that RT is computed by averaging every attempt
+# Another way to compute RT is by summing over incorrect attempts until the RDK is responded to correctly
+
+rdk.crt = aggregate(list("crt" = rdk$rt), by = list("subject"=rdk$subject,  "phase"=rdk$phase, "difficulty"=rdk$dot_difficulty, "trial"=rdk$trial_number), FUN = function(x) tail(cumsum(x), n=1))
+
+# rdk.crt = rdk.crt[rdk.crt$crt <= 6000, ]
+
+aov.crt.data = aggregate(list("rt" = rdk.crt$crt), by = list("subject" = rdk.crt$subject,  "phase" = rdk.crt$phase, "difficulty" = rdk.crt$difficulty), FUN = function(x) mean(x, na.rm=TRUE))
+
+#anova.acc = glm(accuracy ~ condition + phase + difficulty + condition:phase:difficulty, aov.acc.data, family = "gaussian")
+#anova.rt = glm(rt ~ condition + phase + difficulty + condition:phase:difficulty, aov.rt.data, family = "gaussian")
+
+anova.acc = anova_test(data = aov.acc.data, dv = accuracy, wid = subject, within = c(phase, difficulty))
+anova.rt = anova_test(data = aov.rt.data, dv = rt, wid = subject, within = c(phase, difficulty))
+anova.crt = anova_test(data = aov.crt.data, dv = rt, wid = subject, within = c(phase, difficulty))
+
+```
+
+We next analysed performance on the RDK discriminations. We then asked:
+
+* What was the average completion time and accuracy of the easy, medium, hard, and very hard tasks? 
+
+RTs became shorter and more accurate as the difficulty of the RDK became easier. As expected, the RTs were shorter under a deadline than without a deadline. We visualised the response times in two ways: First, we simply took the average of each attempt on each RDK. 
+
+<!-- after first removing `r sum(nlongrts$n)` trials which had RTs greater than 3000 msec.  -->
+
+```{r difficulty_plot, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+
+# Difficulty plot
+rdk$labels = factor(rdk$dot_difficulty)
+levels(rdk$labels) = c("easy", "medium", "hard", "v. hard")
+# rdk$labels = reorder(rdk$labels, new.order = c("easy", "medium", "hard", "v. hard"))
+
+# Trim long tails on violin plot
+pct = quantile(rdk$rt, c(.025, .975))
+trim_rdk = rdk %>% filter(rt > pct[1] & rt < pct[2])
+
+diff_plot <- trim_rdk %>% ggplot(aes(x=labels, y=rt, fill=labels)) + geom_violin(adjust = 1.5, trim = TRUE, scale="area") + geom_jitter(height = 0, width = 0.05) + facet_wrap(~phase) + labs(y="RT (msec)", x = "Difficulty")
+print(diff_plot + ggtitle("Response times as a function of difficulty"))
+```
+
+Second, we computed the time to complete an RDK as the cumulative sum across multiple attempts within a trial (termed Cumulative RT or cRT). That is, if an error is made and the RDK needs to be repeated, then the total RT is the sum of both attempts. 
+
+```{r difficulty_sum_plot, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+# RT summed over additional attempts
+rdk.crt$labels = as.factor(rdk.crt$difficulty)
+levels(rdk.crt$labels) = c("easy", "medium", "hard", "v. hard")
+# rdk.crt$labels = reorder(rdk.crt$labels, new.order = c("easy", "medium", "hard", "v. hard"))
+
+# Trim long tails on violin plot
+spct = quantile(rdk.crt$crt, c(.025, .975))
+trim_crdk = rdk.crt %>% filter(crt > spct[1] & crt < spct[2])
+
+crt_diff_plot <- trim_crdk %>% ggplot(aes(x=labels, y=crt, fill=labels)) + geom_violin(adjust = 1.5, trim = TRUE, scale="area") + facet_wrap(~phase) + labs(y="RT (msec)", x = "Difficulty")
+print(crt_diff_plot + ggtitle("Response times summed over attempts as a function of difficulty"))
+
+```
+
+We further broke down RTs by condition, deadline, and difficulty. 
+
+```{r difficulty_data, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# TODO: recode to tidyverse
+# Find average rdk accuracy and rt in each codnition, phase, and coherence level
+difficulty = aggregate(list("accuracy" = rdk$correct, "rt" = rdk$rt), by = list("difficulty" =  rdk$labels, "phase" = rdk$phase), FUN = function(x) mean(x, na.rm = TRUE))
+sum_difficulty = aggregate(list("crt" = rdk.crt$crt), by = list("difficulty" = rdk.crt$labels, "phase" = rdk.crt$phase), FUN = function(x) mean(x, na.rm = TRUE))
+                
+diffsd = aggregate(list("accuracy" = rdk$correct, "rt" = rdk$rt), by = list("difficulty" = rdk$labels, "phase" = rdk$phase), FUN = function(x) sd(x, na.rm = TRUE))
+sum_diffsd = aggregate(list("crt" = rdk.crt$crt), by = list("difficulty" =  rdk.crt$labels, "phase" = rdk.crt$phase), FUN = function(x) sd(x, na.rm = TRUE))
+
+ncounts = rdk %>% count(condition, phase, dot_difficulty)
+difficulty$n = ncounts$n
+difficulty$accuracy = round(difficulty$accuracy, 2)
+difficulty$rt = round(difficulty$rt, 2)
+difficulty$se.acc = diffsd$accuracy/sqrt(difficulty$n)
+difficulty$se.acc = round(difficulty$se.acc, 2)
+difficulty$se.rt = diffsd$rt/sqrt(difficulty$n)
+difficulty$se.rt = round(difficulty$se.rt, 2)
+difficulty$crt = round(sum_difficulty$crt, 2)
+difficulty$se.crt = sum_diffsd$crt/sqrt(difficulty$n)
+difficulty$se.crt = round(difficulty$se.crt, 2)
+
+# Get reward rate standard error
+rrdata = aggregate(list("accuracy" = rdk$correct), by = list("difficulty" = rdk$labels, "phase" = rdk$phase, "subject"=rdk$subject), FUN = function(x) mean(x, na.rm = TRUE))
+rrdata_crt = aggregate(list("crt" = rdk.crt$crt), by = list("difficulty" = rdk.crt$labels, "phase" = rdk.crt$phase, "subject"=rdk.crt$subject), FUN = function(x) mean(x, na.rm = TRUE))
+
+
+rrdata$crt = rrdata_crt$crt
+rrdata$rewardRate = rrdata$accuracy/(rrdata$crt/1000)
+
+subRewardRate = aggregate(list("rr" = rrdata$rewardRate), by = list("difficulty" =  rrdata$difficulty, "phase" = rrdata$phase), FUN = function(x) mean(x, na.rm = TRUE))
+
+subRewardRate.se = aggregate(list("rr" = rrdata$rewardRate), by = list("difficulty" =  rrdata$difficulty, "phase" = rrdata$phase), FUN = function(x) sd(x, na.rm = TRUE))
+
+difficulty$rewardRate = subRewardRate$rr
+difficulty$SE.rewardRate = subRewardRate.se$rr/sqrt(difficulty$n)
+
+
+difficulty$difficulty = as.factor(difficulty$difficulty)
+#levels(difficulty$difficulty) = c("Very Hard", "Hard", "Medium", "Easy")
+```
+
+
+```{r difficulty_table, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+# TODO: recode to tidyverse
+
+# Create the table
+difficulty = difficulty[c("phase", "difficulty", "n", "accuracy", "se.acc", "rt", "se.rt", "crt", "se.crt")]
+colnames(difficulty)[colnames(difficulty) == "accuracy"] = "Mean.Correct"
+colnames(difficulty)[colnames(difficulty) == "se.acc"] = "SE.Correct"
+colnames(difficulty)[colnames(difficulty) == "rt"] = "Mean.RT"
+colnames(difficulty)[colnames(difficulty) == "se.rt"] = "SE.RT"
+colnames(difficulty)[colnames(difficulty) == "crt"] = "Mean.crt"
+colnames(difficulty)[colnames(difficulty) == "se.crt"] = "SE.crt"
+knitr::kable(difficulty, caption="Mean accuracy, RT, and RT summed across attempts for each difficulty and each phase")
+
+# Marginal means
+# aggregate(rdk$correct, by=list(rdk$condition), FUN=mean)
+# aggregate(rdk$correct, by=list(rdk$phase), FUN=mean)
+# aggregate(rdk$correct, by=list(rdk$difficulty), FUN=mean)
+```
+
+Statistical analysis, using a 2 condition $\times$ 2 phase $\times$ 4 difficulty between-within ANOVA, of the effect of these factors on accuracy confirmed the effect of difficulty, F(`r anova.acc$ANOVA$DFn[anova.acc$ANOVA$Effect == "difficulty"]`, `r anova.acc$ANOVA$DFd[anova.acc$ANOVA$Effect == "difficulty"]`) = `r round(anova.acc$ANOVA$F[anova.acc$ANOVA$Effect == "difficulty"], 2)`, p = `r round(anova.acc$ANOVA$p[anova.acc$ANOVA$Effect == "difficulty"],2)`, $\eta^2$ = `r round(anova.acc$ANOVA$ges[anova.acc$ANOVA$Effect == "difficulty"], 2)`. RDK responses in the fixed condition were more accurate than RDK responses in the random condition, F(`r anova.acc$ANOVA$DFn[anova.acc$ANOVA$Effect == "condition"]`, `r anova.acc$ANOVA$DFd[anova.acc$ANOVA$Effect == "condition"]`) = `r round(anova.acc$ANOVA$F[anova.acc$ANOVA$Effect == "condition"], 2)`, p = `r round(anova.acc$ANOVA$p[anova.acc$ANOVA$Effect == "condition"],2)`, $\eta^2$ = `r round(anova.acc$ANOVA$ges[anova.acc$ANOVA$Effect == "condition"], 2)`. RDK responses were not more accurate under a deadline then under no deadline, F(`r anova.acc$ANOVA$DFn[anova.acc$ANOVA$Effect == "phase"]`, `r anova.acc$ANOVA$DFd[anova.acc$ANOVA$Effect == "phase"]`) = `r round(anova.acc$ANOVA$F[anova.acc$ANOVA$Effect == "phase"], 2)`, p = `r round(anova.acc$ANOVA$p[anova.acc$ANOVA$Effect == "phase"],2)`, $\eta^2$ = `r round(anova.acc$ANOVA$ges[anova.acc$ANOVA$Effect == "phase"], 2)`. However, there was a significant phase $\times$ difficulty interaction, F(`r anova.acc$ANOVA$DFn[anova.acc$ANOVA$Effect == "phase:difficulty"]`, `r anova.acc$ANOVA$DFd[anova.acc$ANOVA$Effect == "phase:difficulty"]`) = `r round(anova.acc$ANOVA$F[anova.acc$ANOVA$Effect == "phase:difficulty"], 2)`, p = `r round(anova.acc$ANOVA$p[anova.acc$ANOVA$Effect == "phase:difficulty"],2)`, $\eta^2$ = `r round(anova.acc$ANOVA$ges[anova.acc$ANOVA$Effect == "phase:difficulty"], 2)` reflecting a greater increase from easy to very hard when there was no deadline compared to when there was a deadline.
+
+We used the same analysis to examine the effect of condition, phase, and difficulty on RT. We confirmed that RTs were shorter under a deadline, F(`r anova.rt$ANOVA$DFn[anova.rt$ANOVA$Effect == "phase"]`, `r anova.rt$ANOVA$DFd[anova.rt$ANOVA$Effect == "phase"]`) = `r round(anova.rt$ANOVA$F[anova.rt$ANOVA$Effect == "phase"], 2)`, p = `r round(anova.rt$ANOVA$p[anova.rt$ANOVA$Effect == "phase"],2)`, $\eta^2$ = `r round(anova.rt$ANOVA$ges[anova.rt$ANOVA$Effect == "phase"], 2)`, and that RTs became shorter as the RDK's became easier, F(`r anova.rt$ANOVA$DFn[anova.rt$ANOVA$Effect == "difficulty"]`, `r anova.rt$ANOVA$DFd[anova.rt$ANOVA$Effect == "difficulty"]`) = `r round(anova.rt$ANOVA$F[anova.rt$ANOVA$Effect == "difficulty"], 2)`, p = `r round(anova.rt$ANOVA$p[anova.rt$ANOVA$Effect == "difficulty"],2)`, $\eta^2$ = `r round(anova.rt$ANOVA$ges[anova.rt$ANOVA$Effect == "difficulty"], 2)`. There was again an interaction between phase and difficulty, F(`r anova.rt$ANOVA$DFn[anova.rt$ANOVA$Effect == "phase:difficulty"]`, `r anova.rt$ANOVA$DFd[anova.rt$ANOVA$Effect == "phase:difficulty"]`) = `r round(anova.rt$ANOVA$F[anova.rt$ANOVA$Effect == "phase:difficulty"], 2)`, p = `r round(anova.rt$ANOVA$p[anova.rt$ANOVA$Effect == "phase:difficulty"],2)`, $\eta^2$ = `r round(anova.rt$ANOVA$ges[anova.rt$ANOVA$Effect == "phase:difficulty"], 2)` indicating that RT decreased more with increasing dot coherence when there was no deadline compared to when there was a deadline. These results accord with the vast literature on RDK performance (see e.g., Ludwig & Evens, 2017). 
+
+Finally, we repeated the analysis using the cRT examining the effect of condition, phase, and difficulty. We confirmed that cRTs were shorter under a deadline, F(`r anova.crt$ANOVA$DFn[anova.crt$ANOVA$Effect == "phase"]`, `r anova.crt$ANOVA$DFd[anova.crt$ANOVA$Effect == "phase"]`) = `r round(anova.crt$ANOVA$F[anova.crt$ANOVA$Effect == "phase"], 2)`, p = `r round(anova.crt$ANOVA$p[anova.crt$ANOVA$Effect == "phase"],2)`, $\eta^2$ = `r round(anova.crt$ANOVA$ges[anova.crt$ANOVA$Effect == "phase"], 2)`, and that RTs became shorter as the RDK's became easier, F(`r anova.crt$ANOVA$DFn[anova.crt$ANOVA$Effect == "difficulty"]`, `r anova.crt$ANOVA$DFd[anova.crt$ANOVA$Effect == "difficulty"]`) = `r round(anova.crt$ANOVA$F[anova.crt$ANOVA$Effect == "difficulty"], 2)`, p = `r round(anova.crt$ANOVA$p[anova.crt$ANOVA$Effect == "difficulty"],2)`, $\eta^2$ = `r round(anova.crt$ANOVA$ges[anova.crt$ANOVA$Effect == "difficulty"], 2)`. There was again an interaction between phase and difficulty, F(`r anova.crt$ANOVA$DFn[anova.crt$ANOVA$Effect == "phase:difficulty"]`, `r anova.crt$ANOVA$DFd[anova.crt$ANOVA$Effect == "phase:difficulty"]`) = `r round(anova.crt$ANOVA$F[anova.crt$ANOVA$Effect == "phase:difficulty"], 2)`, p = `r round(anova.crt$ANOVA$p[anova.crt$ANOVA$Effect == "phase:difficulty"],2)`, $\eta^2$ = `r round(anova.crt$ANOVA$ges[anova.crt$ANOVA$Effect == "phase:difficulty"], 2)` indicating that RT decreased more with increasing dot coherence when there was no deadline compared to when there was a deadline. 
+
+## Reward Rate
+
+To confirm that coherence offered a good proxy for difficulty (and hence, that an optimal order of easiest to hardest was maintained), we calculated the reward rate for each patch. Reward rate can be defined as “the proportion of correct trials divided by the average duration between decisions” (Gold & Shadlen, 2002), and is tantamount, in our task, to  percentage of correct responses per unit time (Bogacz et al, 2006). For our purposes, we can fix time at 1 sec calculate the Reward Rate as the number of RDK tasks completed in 1 sec.
+
+By assumption, the weight of all tasks is the same and is equal to, say, 1 point each. Normally, we would expect performance on easier tasks to be both faster and more accurate. The optimal strategy to complete as many tasks as possible (thereby maximising reward rate) should then be to approach them by order of difficulty, easy to hardest. But what if, for example, on hard tasks, people guess quickly? They could gain points and waste very little time, possibly leading to a sizable reward rate. 
+
+Take the following hypothetical example: suppose you complete an easy task with perfect accuracy but take a long time to make the perceptual decision, say MRT = 2 sec. Suppose then the very difficult condition is too hard to judge. It would take > 2 secs to judge correct, but you can and guess quickly and average a time less than 2 sec, say MRT = 0.5 sec. With two response alternatives your odds are 50% so over the long run you are better off starting with the hardest task, with chance accuracy and no time lost (of course, one may also guess on the easy task, and we can check the data to see if people do so). The next section calculates reward rate for each of the four difficulty conditions, based on empirical data delineating % correct and MRT.
+
+Inspection of the figure reveals that RR is roughly monotonically increasing when tasks become easier. Under such conditions, the optimal order of task-completion should be easy-to-hardest. This could change in a predictable manner if people value differently easy and hard tasks (overweight completion of harder tasks). The only notable exception was in the fixed, no deadline task, where the easy and medium RDK conditions had equal RR. 
+
+
+```{r rewardRate_plot, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+rr_plot <- rrdata %>% ggplot(aes(x=difficulty, y=rewardRate, fill=difficulty)) + geom_violin(adjust = 1.5, trim = TRUE) +  stat_summary(fun=mean, geom="point", shape=23, size=2) + facet_wrap(~phase) + labs(y="Reward Rate = p(Correct)/RT(sec)", x = "Difficulty") + lims(y = c(0, 2.5))
+
+print(rr_plot + ggtitle("Reward Rate as a function of difficulty"))
+
+```
+
+
+## Optimality in each condition
+
+Having now established that the RDK's are ordered in accuracy, difficulty, and reward rate, it is clear that the task set presented to each subject has an optimal solution, ordered from easiest to most difficult. We now ask: 
+
+* What is the proportion of easy, medium, hard, and very hard tasks selected first, second, third or fourth? 
+
+We first compute the marginal distribution of the ranks of each of the tasks; in other words, what are the proportions of the ranks of each task in each rank position. These matrices indicate the proportions of responses for each difficulty level which were chosen first, second, third, or fourth, respectively. The matrix from a dataset in which choice is always optimal would have ones on the diagonal and zeros on the off-diagona.
+
+
+```{r get_selections, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+numberOfTasks = 4 # Number of tasks
+
+selection_data = data %>% filter(trial_event %in% c("practice_pix", "select_pix"))
+selection_data$trial_event = droplevels(selection_data$trial_event) # drop demographics level
+
+ph = c(rep("untimed", 10), rep("deadline", 30))
+cn = c(rep("practice_pix", 10), rep("select_pix", 30))
+tr = c(seq(0,9), seq(0,29))
+sdLength = length(cn) # selection data length for each subject
+
+# Convert location selections to difficulty order selections
+selections = data.frame(subject = rep(finalSubjects$uniqueid, each = sdLength), phase = rep(ph, sum(final_n$n)), trial = rep(tr, sum(final_n$n)), selected_difficulty_1 = rep(NA, sum(final_n$n) * sdLength), selected_difficulty_2 = rep(NA, sum(final_n$n) * sdLength), selected_difficulty_3 = rep(NA, sum(final_n$n) * sdLength), selected_difficulty_4 = rep(NA, sum(final_n$n) * sdLength))
+selections$phase <- factor(selections$phase, levels = c("untimed", "deadline"))
+
+
+cnt = 1
+total = sum(final_n$n) * sdLength
+pb <- txtProgressBar(min = 0, max = total, style = 3)
+for (i in 1:sum(final_n$n)){
+    for (j in 1:sdLength){
+      # Coherence in each location (W, N, E, S) 
+      coherence_locations = selection_data %>% filter(uniqueid == finalSubjects$uniqueid[i], trial_event == cn[j], trial_number == tr[j]) %>% slice(1) %>% select(patch_0, patch_1, patch_2, patch_3)
+      location_selections = selection_data %>% filter(uniqueid == finalSubjects$uniqueid[i], trial_event == cn[j], trial_number == tr[j]) %>% pull(button_pressed) + 1
+      
+      coherence_selections = as.numeric(as.vector(coherence_locations)[location_selections[!is.na(location_selections)]])
+      length(coherence_selections) <- numberOfTasks # pad end with NAs
+
+      selection_rt = selection_data %>% filter(uniqueid == finalSubjects$uniqueid[i], trial_event == cn[j], trial_number == tr[j]) %>% pull(rt)
+      length(selection_rt) <- numberOfTasks # pad end with NAs      
+            
+      selections$selected_difficulty_1[cnt] = c(which(coherence_set == coherence_selections[1]), NA)[1]
+      selections$selected_difficulty_2[cnt] = c(which(coherence_set == coherence_selections[2]), NA)[1]
+      selections$selected_difficulty_3[cnt] = c(which(coherence_set == coherence_selections[3]), NA)[1]
+      selections$selected_difficulty_4[cnt] = c(which(coherence_set == coherence_selections[4]), NA)[1]
+      
+      selections$rt_1[cnt] = selection_rt[1]
+      selections$rt_2[cnt] = selection_rt[2]
+      selections$rt_3[cnt] = selection_rt[3]
+      selections$rt_4[cnt] = selection_rt[4]         
+      
+      cnt = cnt + 1
+      setTxtProgressBar(pb, cnt)
+    }
+}
+close(pb)
+```
+
+```{r find_heatmap, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+fixed_untimed   = selections %>% filter(phase == "untimed") %>% select(selected_difficulty_1, selected_difficulty_2, selected_difficulty_3, selected_difficulty_4) %>% as.matrix()
+fixed_deadline  = selections %>% filter(phase == "deadline") %>% select(selected_difficulty_1, selected_difficulty_2, selected_difficulty_3, selected_difficulty_4) %>% as.matrix()
+
+imputeMissingData = function(data, n = numberOfTasks){
+  for (i in 1:n){
+      data[is.na(data[,i]), i] = mean(data[,i], na.rm=TRUE)
+  }
+  return(data)
+}
+
+fixed_untimed = imputeMissingData(fixed_untimed, numberOfTasks)
+fixed_deadline = imputeMissingData(fixed_deadline, numberOfTasks)
+
+# It's unclear what pmr needs you to impute missing ranks because rankagg() removes them! 
+# rankagg() is the same as as.matrix(as.tibble(fixed_untimed) %>% drop_na() %>% group_by_all() %>% count())
+
+fu = fixed_untimed %>% rankagg() %>% destat()
+# fu = 
+fd = fixed_deadline %>% rankagg() %>% destat()
+
+```
+
+```{r heatmap_plot, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+
+# Convert to proportions
+setUpMat = function(matData){
+  mat = t(apply(matData, 1, function(x) x/sum(x)))  
+  matMelt = melt(mat)
+  names(matMelt) = c("Difficulty", "Order", "value")
+  return(matMelt)
+}
+fumelt = setUpMat(fu$mar)
+fdmelt = setUpMat(fd$mar)
+
+
+hm = rbind(cbind("condition" = rep("Fixed Untimed", nrow(fumelt)), fumelt), 
+           cbind("condition" = rep("Fixed Deadline", nrow(fdmelt)), fdmelt))
+
+hmplot = ggplot(hm, aes(x=Difficulty, y=Order)) +
+          geom_tile(aes(fill=value)) +
+          scale_fill_gradientn(colours=c("blue","pink", "red")) +
+          geom_text(aes(label=round(value, 2))) + 
+          scale_y_reverse() +
+          facet_wrap(~condition) + 
+          labs(y="Selection", x = "Difficulty")
+print(hmplot)
+
+```
+
+* Do the marginal distributions differ from uniformity?
+
+We tested whether the marginal distributions were different from uniformally random selection using the fact that the mean rank is distributed according to a  $\chi^2$ distribution with the following test-statistic:
+$$\chi^2 = \frac{12N}{k(k+1)}\sum_{j=1}^k \left(m_j - \frac{k+1}{2} \right)^2$$
+see (Marden, 1995). 
+
+```{r chi2uniformity, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+selection_n = selections %>% count( phase) 
+
+# Compare heatmaps to uniform
+chi2UniformRank = function(observed, n, k = numberOfTasks){
+  ex <- rep((k + 1)/2, k);
+  oc <- observed
+  
+  chi = (12 * n/(k * (k + 1))) * sum((oc - ex)^2) # Test statistic of mean rank under uniformity
+  p = dchisq(chi, k-1)
+  return(list("chi2" = chi, "chi2p" = p))
+}
+
+fu$uni <- chi2UniformRank(fu$mean.rank, selection_n$n[selection_n$phase == "untimed"])
+fd$uni <- chi2UniformRank(fd$mean.rank, selection_n$n[selection_n$phase == "deadline"])
+
+chiUniformTable = data.frame("condition" = c("fixed", "fixed"), 
+                            "phase" = c("untimed", "deadline"), 
+                            "chi2" = round(c(fu$uni$chi2, fd$uni$chi2),2), 
+                            "df" = c(3,3),
+                            "p" = round(c(fu$uni$chi2p, fd$uni$chi2p), 2))
+
+knitr::kable(chiUniformTable, caption = "Chi2 test of uniformity")
+
+```
+
+
+It is evident at a glance that the ordering of choices is more optimal when the locations are fixed; that is, the proportions on the diagonal are higher. When the locations are fixed, choice order becomes more optimal under a deadline. By contrast, when locations are random, responding becomes _less_ optimal under a deadline. This likely reflects the additional costs of having to search for the appropriate task to complete. This search is minimised in the fixed location condition. 
+
+We compared the location conditions and phases using chi-2 analysis.
+
+```{r chi2btw, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+# Compare heatmaps to each other
+chi2_f_UvsD = chisq.test(cbind(as.vector(fu$mar),as.vector(fd$mar))) # Fixed: Untimed vs Deadline
+
+chi2compTable = data.frame("Comparison" = c("Fixed: Untimed vs Deadline"), 
+                           "chi2" = round(c(chi2_f_UvsD$statistic), 2),
+                           "df" = c(chi2_f_UvsD$parameter),
+                           "p"  = round(c(chi2_f_UvsD$p.value), 2))
+
+knitr::kable(chi2compTable, caption = "Pearson's chi-squared test")
+
+
+# MANOVA-like analysis to compare multiple groups? (Marsden book)
+
+
+
+
+```
+
+
+```{r distcomp, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# Distance parameters
+maxdistance = (numberOfTasks * (numberOfTasks-1))/2
+missing_penalty = maxdistance/numberOfTasks
+allperms = permutations(n=4, r=4, v=1:4, repeats.allowed=FALSE)
+nperms = nrow(allperms)
+
+# Compute distance from optimal for all perms
+pdist <- rep(NA, nperms)
+for (i in 1:nperms){
+  distObj = ConDisPairs(table(allperms[i, ], c(1,2,3, 4)))
+  pdist[i] = distObj$D  
+}
+
+# Find average distance based on all partial matches
+scorePartialMatches = function(sv, allperms, pdist){
+    selVector = as.numeric(sv)
+    if (all(is.na(selVector))){ # If no tasks are selected
+      avgd = mean(pdist)
+      mind = min(pdist)
+      maxd = max(pdist)      
+    } else {
+      if (sum(!is.na(selVector)) > 1){ # If more than one task is selected
+        dvec = pdist[apply(t(replicate(nperms, selVector[!is.na(selVector)])) == allperms[, !is.na(selVector)], 1, function(x)all(x))]
+      } else { # If only one task is selected
+        dvec = pdist[selVector[!is.na(selVector)] == allperms[, !is.na(selVector)]]
+      }
+      avgd = mean(dvec)
+      mind = min(dvec)
+      maxd = max(dvec)
+    }
+    return(list("avgD" = avgd, "minD" = mind, "maxD" = maxd))
+}
+
+# Add average distance column
+selections = selections %>% mutate("avgD" = apply(selections %>% select(selected_difficulty_1, selected_difficulty_2, selected_difficulty_3, selected_difficulty_4), 1, function(x)(scorePartialMatches(x, allperms, pdist)$avgD)))
+
+# Add min distance column
+selections = selections %>% mutate("minD" = apply(selections %>% select(selected_difficulty_1, selected_difficulty_2, selected_difficulty_3, selected_difficulty_4), 1, function(x)(scorePartialMatches(x, allperms, pdist)$minD)))
+
+# Add max distance column
+selections = selections %>% mutate("maxD" = apply(selections %>% select(selected_difficulty_1, selected_difficulty_2, selected_difficulty_3, selected_difficulty_4), 1, function(x)(scorePartialMatches(x, allperms, pdist)$maxD)))
+
+```
+
+
+```{r match_analysis, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# Omit this
+
+ # # Compute matches by subject for first selection, first two selections, first three selections
+ #  match1 = aggregate(cbind(fullmat[,1], fullmat[,2]==fullopt[,2]), by=list(fullmat[,1]), FUN = function(x)mean(x,na.rm=TRUE))
+ #  match2 = aggregate(cbind(fullmat[, 1], apply(fullmat[,2:3] == fullopt[,2:3], 1, all)), by=list(fullmat[,1]), FUN = function(x)mean(x,na.rm=TRUE))
+ #  match3 = aggregate(cbind(fullmat[, 1], apply(fullmat[,2:4] == fullopt[,2:4], 1, all)), by=list(fullmat[,1]), FUN = function(x)mean(x,na.rm=TRUE))
+ #  # match4 = aggregate(cbind(fullmat[, 1], apply(fullmat[,2:5] == fullopt[,2:5], 1, all)), by=list(fullmat[,1]), FUN = mean) # same as match3
+ #  matches = as.data.frame(cbind(match1$V1, match1$V2, match2$V2, match3$V2))
+ #  names(matches) = c("subjects", "match1", "match2", "match3")
+```
+
+
+<!-- * We next ask whether the sequence of choices reflected the optimal order: What is the proportion of easy-task-first choices in each condition? Of easy-then-medium? Of easy-medium-then-hard? This provides an indication of how the order of responding deviates from optimal in each condition. The table presents the proportion of subjects responding with each order; the figure presents the frequency with which subjects respond with the easiest first RDK, easiest then medium, and so on. -->
+
+```{r analyseMatches, fig.height = 10, fig.width = 9, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+# avgMatch = aggregate(list("easy first"=match_mat$match1, "easy-med"=match_mat$match2, "easy-med-hard"=match_mat$match3), by = list("phase"=match_mat$phase, "condition"=match_mat$condition), FUN = function(x)mean(x,na.rm=TRUE))
+# 
+# avgMatch$easy.first = round(avgMatch$easy.first,2)
+# avgMatch$easy.med = round(avgMatch$easy.med,2)
+# avgMatch$easy.med.hard = round(avgMatch$easy.med.hard,2)
+# 
+# # Create the table
+# kable(avgMatch, caption="Average optimal choices")
+# 
+# long_match = melt(match_mat, id.var = c("condition", "phase"), measure.var = c("match1", "match2", "match3"), variable.name = "match")
+# levels(long_match$match) = c("Order = Easy", "Order = Easy, Medium", "Order = Easy, Medium, Hard")
+# 
+# match_plot <- long_match %>% ggplot(aes(x=value, fill=match)) + geom_histogram(color="white", alpha=0.6, bins = 10, position="identity") + facet_wrap(~condition+phase+match, nrow=4, ncol = 3) + labs(y="Participant Frequency", x = "Proportion of First Choices")
+# 
+# print(match_plot + ggtitle("Optimally Ordered Responses")) 
+
+```
+
+* How optimal were responses? 
+
+The next analysis computed the distance between the selected order and the optimal order (easiest to very hard for that trial), which ranges between 0 (perfect match) and 6 (maximally distant), for 4 options. 
+
+What we want is the distance of the selected options from the optimal solutions, which is the edit distance (or number of discordant pairs) between orders. However, because a participant may run out of time, there may be missing values. To handle these values, for each trial, we find the orders which partially match the selected order and compute three the average distance of those possible orders and the optimal solution (*avg_distance*). 
+
+The following figure compares the avg_distance between the fixed difficulty and random difficulty conditions as a function of deadline condition and phase. For each of these measures, lower values reflect respones which are closer to optimal.
+
+```{r plotData, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+# max_plot <- avg_maxdata %>% ggplot(aes(x=avg, fill=phase)) + geom_histogram(color="white", alpha=0.6, bins = 10, position="identity") + facet_wrap(~condition+phase) + labs(y="Frequency", x = "Max Distance")
+# print(max_plot + ggtitle("Max Distance"))
+# 
+# min_plot <- avg_mindata %>% ggplot(aes(x=avg, fill=phase)) + geom_histogram(color="white", alpha=0.6, bins = 10, position="identity") + facet_wrap(~condition+phase) + labs(y="Frequency", x = "Min Distance")
+# print(min_plot + ggtitle("Min Distance"))
+
+avg_plot <- selections %>% ggplot(aes(x=avgD, fill=phase)) + geom_histogram(aes(y=..density..), color="white", alpha=0.6, bins = 6, position="identity") + facet_wrap(~phase) + labs(y="Probability", x = "Avg Distance")
+print(avg_plot + ggtitle("Avg Distance"))
+
+
+```
+# Selection model
+
+We can treat each task selection as a probabilistic choice given by a Luce's choice rule (Luce, 1959), where each task is represented by some strength, $\nu$. The probability of selecting task $i_j$ from set $S = \left{i_1, i_2, ..., i_J \right}$, where J is the number of tasks, is:
+
+$$p\left(i_j |S \right) = \frac{\nu_{i_j}}{\sum_{i \in S} \nu_{i}} $$.
+
+Plackett (1975) generalised this model to explain the distribution over a sequence of choices (i.e., ranks). In this case, after each choice, the choice set is reduce by one (i.e., sampling without replacement). This probability of observing a specific selection order, $i_1 \succ ... \succ i_J$ is:
+
+$$p\left(i_j |A \right) = \prod_{j=1}^J \frac{\nu_{i_j}}{\sum_{i \in A_j} \nu_{i}} $$, 
+
+where $A_j$ is the current choice set.
+
+
+```{r PLmodel, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+
+# Estimate Plackett-Luce model parameters
+
+fu.pl = fixed_untimed %>% rankagg() %>% pl() # use fd.pl@details to access results
+fd.pl = fixed_deadline %>% rankagg() %>% pl()
+
+slopeLP = function(coef){
+    # Fit a line to the coefficients
+    df = data.frame('diff' = seq(4,1), 'x' = coef)
+    lmod = lm(x ~ diff, df)
+    slope = round(lmod$coefficients['diff'], 4)
+    return("slope" = slope)
+}
+
+PlackettLuceParms = data.frame("phase" = c("untimed", "deadline"), 
+                              "Easy" = round(c(fu.pl@coef[1], fd.pl@coef[1]),2),
+                              "Med" = round(c(fu.pl@coef[2], fd.pl@coef[2]),2),
+                              "Hard" = round(c(fu.pl@coef[3], fd.pl@coef[3]),2),
+                              "V. Hard" = round(c(fu.pl@coef[4], fd.pl@coef[4]),2), 
+                              "Slope" = c(slopeLP(fu.pl@coef), slopeLP(fd.pl@coef)))
+knitr::kable(PlackettLuceParms, caption = "Plackett-Luce strength parameter estimates")
+
+
+
+
+plSample = function(coefs){
+  coefs[coefs<0] <- 0
+  J = length(coefs)
+  A = 1:J
+  v = coefs/sum(coefs)
+  s = rep(NA, J)
+  for (i in 1:(J-1)){
+    s[i] = sample(A, 1, prob=v)
+    v = v[A!=s[i]]
+    v = v/sum(v)
+    A = A[A!=s[i]]
+  }
+  s[J] = A
+  return(s)
+}
+
+plSamples = function(coefs, n){
+    s = matrix(NA, n, 4)
+    for (i in 1:n){
+        s[i,] = as.matrix(plSample(coefs))
+    }
+    return(s)
+}
+
+# TODO: Sample selection orders using pl coefficients
+nsim = 10000
+sim_pl = data.frame("condition" = c(rep("fixed", nsim*2)),
+                    "phase" = c(rep("untimed", nsim), rep("deadline", nsim)),
+                    "sim" = rbind(plSamples(fu.pl@coef, nsim), plSamples(fd.pl@coef, nsim)))
+sim_pl$phase <- factor(sim_pl$phase, levels=c('untimed', 'deadline'))
+
+# Add average distance column
+sim_pl = sim_pl %>% mutate("avgD" = apply(sim_pl %>% select(sim.1, sim.2, sim.3, sim.4), 1, function(x)(scorePartialMatches(x, allperms, pdist)$avgD)))
+
+#       Compare resulting distribution with data
+sim_avg_plot <- sim_pl %>% ggplot(aes(x=avgD, fill=phase)) + geom_histogram(aes(y=..density..), color="white", alpha=0.6, bins = 6, position="identity") + facet_wrap(~phase) + labs(y="Probability", x = "Avg Distance")
+print(sim_avg_plot + ggtitle("Avg Distance - Plackett-Luce Model"))
+```
+
+## Sampling distribution anlaysis
+
+In order to characterise performance, we examined three sampling distributions for comparison to our data. The first is the sampling distribution of edit distances from optimal assuming that orders are sampled uniformly at random. The second distribution assumes that the first choice was optimal but the remaining orders are sampled at random. Finally, the third distributions assumes that the first two choices are selected optimally but that the remaining are randomly selected. It is clear that the mode of the distribution moves from a distance of 3 to a distance of 0 as the sampling distribution summarises orders which better conform to optimality. 
+
+To characterise the optimality of each condition at each point in the experiment, we first computed the ks-test statistic between the data (the average partial distance data) and the random order distribution and the first-two optimal distribution. Since smaller ks-statistics indicate a closer match between the distributions, we then took the ratio of the ks-statistics (random over first two-optimal). Values less than one indicate that the data are more consistent with random than optimal responding. Values greater than one indicate that the data are more consistent with optimal rather than random responding. 
+
+```{r sampling_dist, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+
+opt_order_dist = function(trial_optimal_order, nperms=nperms, allperms=allperms){
+  pdist <- rep(NA, nperms)
+  for (i in 1:nperms){
+    distObj = ConDisPairs(table(allperms[i, ], trial_optimal_order))
+    pdist[i] = distObj$D  
+  }
+  return(pdist)
+}
+
+opt_order = c(1,2,3,4)
+opt_dist_list = opt_order_dist(opt_order, nperms, allperms)
+
+nsamples = 1000
+
+# sample a bunch of orders, and compute the distances
+allrand = as.data.frame(list("s" = sample(opt_dist_list, nsamples, replace = TRUE)))
+onefix = as.data.frame(list("s" = sample(opt_dist_list[allperms[,1]==1], nsamples, replace = TRUE)))
+twofix = as.data.frame(list("s" = sample(opt_dist_list[allperms[,1]==1 & allperms[,2]==2], nsamples, replace = TRUE)))
+distance_samples = as.data.frame(rbind(cbind("cond" = rep(1, nsamples), "s" = allrand$s), cbind("cond" = rep(2, nsamples), "s" = onefix$s), cbind("cond" = rep(3, nsamples), "s" = twofix$s)))
+
+
+# plot the distribution of distances
+samp_plot <- distance_samples %>% ggplot(aes(s)) + 
+  geom_histogram(color="white", alpha =0.8, bins=7, position="identity") + 
+  labs(y = "Frequency of Sample", x = "Distance From Optimal") + 
+  facet_wrap(~cond)
+print(samp_plot)
+
+# Statistical comparison
+#ks.test(avg_avgdata$avg[avg_avgdata$condition == "fixed" & avg_avgdata$phase == "deadline early"], avg_avgdata$avg[avg_avgdata$condition == "fixed" & avg_avgdata$phase == "deadline late"])
+
+# Lower values of the ks test indicate higher similarity between the distributions, so compare the ratio of optimal vs random distances at each time point
+# Note: you don't have to sample for the kstest, you can just use the actual values, but sampling is fine
+# > 1 indicates more optimal than random, < 1 indicates more random than optimal
+
+ks.fixed.phase1 = ks.test(allrand$s, selections %>% filter(phase == "untimed") %>% pull(avgD))$statistic/ks.test(twofix$s, selections %>% filter(phase == "untimed") %>% pull(avgD))$statistic
+
+ks.fixed.phase2 = ks.test(allrand$s, selections %>% filter(phase == "deadline") %>% pull(avgD))$statistic/ks.test(twofix$s, selections %>% filter(phase == "deadline") %>% pull(avgD))$statistic
+
+# Build data for plotting
+randomness = as.data.frame(list("condition" = factor(c("fixed", "fixed"), levels =c("fixed")), 
+                                "phase" = factor(c("untimed", "deadline"), levels = c("untimed", "deadline")), 
+                                "ratio" = c(ks.fixed.phase1, ks.fixed.phase2)))
+levels(randomness$phase) = c("untimed", "deadline")
+
+# Plot
+random_eval_plot <- randomness %>% ggplot(aes(x=phase, y=ratio, group=condition)) + 
+                    geom_line(aes(linetype=condition), size=1) +  
+                     geom_point(size=4) + 
+                     labs(y="Ratio (Random Distance/Optimal Distance)", x = "Phase") + 
+                     ggtitle("Comparison to random and optimal sampling distributions") + 
+                     geom_hline(yintercept =1, linetype="dotted", color="black", size=.5)
+print(random_eval_plot)
+
+```
+
+This figure efficiently summarises the main result: responding is more optimal in the fixed deadline condition particularly during the last ten trials; in the random deadline conditions, responding was closer to a random sampling distribution than to an optimal sampling distribution. 
+
+## Selection Choice RTs
+
+```{r first_choice_rt, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+selection_mean_rts = selections %>% group_by(phase) %>% summarise("mrt_sel1" = round(mean(rt_1, na.rm=TRUE)), "mrt_sel2" = round(mean(rt_2, na.rm=TRUE)), "mrt_sel3" = round(mean(rt_3, na.rm=TRUE)), "mrt_sel4" = round(mean(rt_4, na.rm=TRUE))) 
+
+kable(selection_mean_rts, caption = "Mean RTs for each scheduling selection")
+
+```
+
+<!-- ## Alternative response strategies -->
+
+<!-- An alternative possible strategy involves selecting RDKs based on spatial position. One salient strategy would be to start with a random RDK and then select the remaining tasks in clockwise and anti-clockwise order.  -->
+
+```{r spatial_analysis, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# 
+# clockwise = rbind(c(0, 1, 2, 3), c(1, 2, 3, 0), c(2, 3, 0, 1), c(3, 0, 1, 2))
+# anticlockwise = rbind(c(0, 3, 2, 1), c(1, 0, 3, 2), c(2, 1, 0, 3), c(3, 2, 1, 0))
+# spatial_orders = rbind(clockwise, anticlockwise)
+# 
+# # Code whether each selection is consistent or inconsistent with a circular strategy
+# get_spatial_consistency = function(sdata, spatial_orders, ntrials, n, nSubjects, subjects){
+#   
+#   # preallocate variables for output
+#   spatial_choice_scores <- matrix(data=NA, nrow=nSubjects, ncol=ntrials)
+#   spatial_display_scores <- matrix(data=NA, nrow=nSubjects, ncol=ntrials)
+#   for (j in 1:nSubjects){
+#     # select out data for subject j
+#     tdata = sdata[sdata$uniqueid == subjects[j], ]
+#     
+#     # preallocated subject specific task selection matrix
+#     #selmat <- matrix(data=NA, nrow=ntrials, ncol=n)
+#     for (i in 1:ntrials){
+# 
+#         # Get the task selection order for the current trial (may be incomplete if timed out)
+#         csel = tdata[tdata$trial_number == i-1, ]$button_pressed+1
+#         #csel[csel==5] = NA # NULL is coded as option 5, Replace NULL with NA
+#         #csel = as.numeric(as.character(as.matrix(csel)))
+#         
+#         #selmat[i, 1:length(csel)] = csel # NULL is coded as option 5
+#         #selmat[i, selmat[i,] == 5] = NA  # Replace NULL with NA
+#         
+#         # Get coherence order for the current trial
+#         coh = c(tdata[tdata$trial_number == i-1, ]$patch_0[1], tdata[tdata$trial_number == i-1, ]$patch_1[1], tdata[tdata$trial_number == i-1, ]$patch_2[1], tdata[tdata$trial_number == i-1, ]$patch_3[1])
+#         
+#         cohOrder = order(coh) # Locations of each difficulty (very hard, hard, med, easy)
+#         
+#         # Code trial and coherence as spatially consistent or not
+#         spatial_choice_scores[j,i] = as.numeric(any(apply(spatial_orders[ , 1:3], 1, function(x) identical(x, csel[1:3]))))
+#         spatial_display_scores[j,i] = as.numeric(any(apply(spatial_orders[ , 1:3], 1, function(x) identical(x, cohOrder[1:3]-1))))
+#     }
+#   }
+#   return(list("choice" = spatial_choice_scores, "display" = spatial_display_scores))
+# }
+# 
+# 
+# # Compute responses consistent with a spatial strategy
+# # sdata, spatial_orders, ntrials, n, nSubjects, subjects
+# spatial_scores = list("fixed" = list("practice" = get_spatial_consistency(splitData(fd$data)$practice, spatial_orders, 10, 
+#                                                          n, fd$nSubjects, fd$subjects), 
+#                             "experiment" = get_spatial_consistency(splitData(fd$data)$experiment, spatial_orders, 30,
+#                                                          n, fd$nSubjects, fd$subjects)), 
+#              "random" = list("practice" = get_spatial_consistency(splitData(rd$data)$practice, spatial_orders, 10, 
+#                                                          n, rd$nSubjects, rd$subjects), 
+#                             "experiment" = get_spatial_consistency(splitData(rd$data)$experiment, spatial_orders, 30,
+#                                                          n, rd$nSubjects, rd$subjects)))
+
+```
+
+
+```{r buildSpatialComparison, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# fscon = data.frame(condition = as.factor(rep(1, fd$nSubjects*10)), 
+#                   subjects = rep(1:fd$nSubjects + 100, each=10), 
+#                   trials = rep(1:10, fd$nSubjects), 
+#                   sc_practice = matrix(t(spatial_scores$fixed$practice$choice), 10*nrow(spatial_scores$fixed$practice$choice), byrow= FALSE), 
+#                   sc_expFirst10 = matrix(t(spatial_scores$fixed$experiment$choice[, 1:10]), 10*nrow(spatial_scores$fixed$experiment$choice), byrow= FALSE), 
+#                   sc_expLast10 = matrix(t(spatial_scores$fixed$experiment$choice[, 21:30]), 10*nrow(spatial_scores$fixed$experiment$choice), byrow= FALSE), 
+#                   sd_practice = matrix(t(spatial_scores$fixed$practice$display), 10*nrow(spatial_scores$fixed$practice$display), byrow= FALSE), 
+#                   sd_expFirst10 = matrix(t(spatial_scores$fixed$experiment$display[, 1:10]), 10*nrow(spatial_scores$fixed$experiment$display), byrow= FALSE), 
+#                   sd_expLast10  = matrix(t(spatial_scores$fixed$experiment$display[, 21:30]), 10*nrow(spatial_scores$fixed$experiment$display), byrow= FALSE))
+# 
+# rscon = data.frame(condition = as.factor(rep(2, rd$nSubjects*10)), 
+#                   subjects = rep(1:rd$nSubjects + 200, each=10), 
+#                   trials = rep(1:10, rd$nSubjects), 
+#                   sc_practice = matrix(t(spatial_scores$random$practice$choice), 10*nrow(spatial_scores$random$practice$choice), byrow= FALSE), 
+#                   sc_expFirst10 = matrix(t(spatial_scores$random$experiment$choice[, 1:10]), 10*nrow(spatial_scores$random$experiment$choice), byrow= FALSE), 
+#                   sc_expLast10 = matrix(t(spatial_scores$random$experiment$choice[, 21:30]), 10*nrow(spatial_scores$random$experiment$choice), byrow= FALSE), 
+#                   sd_practice = matrix(t(spatial_scores$random$practice$display), 10*nrow(spatial_scores$random$practice$display), byrow= FALSE), 
+#                   sd_expFirst10 = matrix(t(spatial_scores$random$experiment$display[, 1:10]), 10*nrow(spatial_scores$random$experiment$display), byrow= FALSE), 
+#                   sd_expLast10  = matrix(t(spatial_scores$random$experiment$display[, 21:30]), 10*nrow(spatial_scores$random$experiment$display), byrow= FALSE))
+# 
+# spatialdata = rbind(fscon, rscon)
+# 
+# # Set up summary data dataframe: spatial choice consistency
+# sc_a = setNames(aggregate(spatialdata$sc_practice, by=list(spatialdata$condition, spatialdata$subject), mean), c("condition", "subject", "avg"))
+# sc_b = setNames(aggregate(spatialdata$sc_expFirst10, by=list(spatialdata$condition, spatialdata$subject), mean), c("condition", "subject", "avg"))
+# sc_c = setNames(aggregate(spatialdata$sc_expLast10, by=list(spatialdata$condition, spatialdata$subject), mean), c("condition", "subject", "avg"))
+# 
+# avg_scdata = rbind(cbind(sc_a, phase=rep("untimed practice", nrow(sc_a))), 
+#                     cbind(sc_b, phase=rep("deadline early", nrow(sc_b))), 
+#                     cbind(sc_c, phase=rep("deadline late", nrow(sc_c))))
+# avg_scdata$phase = as.factor(avg_scdata$phase)         # Convert phase to factor
+# levels(avg_scdata$condition) = c("fixed", "random") # Replace condition names
+# 
+# # Set up summary data dataframe: spatial display consistency
+# sd_a = setNames(aggregate(spatialdata$sd_practice, by=list(spatialdata$condition, spatialdata$subject), mean), c("condition", "subject", "avg"))
+# sd_b = setNames(aggregate(spatialdata$sd_expFirst10, by=list(spatialdata$condition, spatialdata$subject), mean), c("condition", "subject", "avg"))
+# sd_c = setNames(aggregate(spatialdata$sd_expLast10, by=list(spatialdata$condition, spatialdata$subject), mean), c("condition", "subject", "avg"))
+# 
+# avg_sddata = rbind(cbind(sd_a, phase=rep("untimed practice", nrow(sd_a))), 
+#                     cbind(sd_b, phase=rep("deadline early", nrow(sd_b))), 
+#                     cbind(sd_c, phase=rep("deadline late", nrow(sd_c))))
+# avg_sddata$phase = as.factor(avg_sddata$phase)         # Convert phase to factor
+# levels(avg_sddata$condition) = c("fixed", "random") # Replace condition names
+
+```
+
+<!-- The following plot shows the distribution of participants' spatial strategy use. Higher proportions indicate responses which are more consistent with a spatial strategy. These figures indicate that most participants do not use a spatial strategy. when difficulty is maintained in a fixed location, two groups emerge under a deadline: those who do not use a spatial strategy, though there is a slightly higher frequency of spatial strategy use in the random condition. -->
+
+```{r plotSpatialData, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+# spatial_choice_plot <- avg_scdata %>% ggplot(aes(x=avg, fill=phase)) + geom_histogram(color="white", alpha=0.6, bins = 10, position="identity") + facet_wrap(~condition+phase) + labs(y="Frequency", x = "Proportion of Spatially Consistent Responses") + ggtitle("Spatial Strategy Analysis")
+# 
+# #avg_plot <- avg_avgdata %>% ggplot(aes(x=avg, fill=phase+phase)) + geom_histogram(color="white", alpha=1, bins = 10) + facet_wrap(~condition+phase)
+# 
+# print(spatial_choice_plot)
+
+```
+
+
+```{r otherAnalyses, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# Use package mixedMem or PLMIX to estimate mixtures of the PlackettLuce model with different groups having different coefficients. 
+# Use PLMIX to estimate the PlackettLuce model using Bayes
+```
+
+```{r detectMissingSelectionData, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# Cycle through every trial, from every subject, from each phase, of every condition 
+# Determine if the recorded RDK data matches the selection data
+conditions = c("fixed")
+phases = c("untimed", "deadline")
+max_trials = c(9, 29) # number of trials in the untimed and deadline conditions
+# finalSubjects - list of final subject numbers (uniqueIDs)
+
+
+udata <- data %>% filter(phase == "untimed")
+ddata <- data %>% filter(phase == "deadline")
+
+
+troubleMakers = setNames(data.frame(matrix(ncol = 4, nrow = 0)), c("condition", "uniqueid", "phase", "trial_number"))
+rcnt= 1;
+
+cnt = 1
+total = sum(final_n$n) * 10
+pb <- txtProgressBar(min = 0, max = total, style = 3)
+# Cycle through untimed data first
+for (i in 1:sum(final_n$n)){
+  # Extract subject data
+  sdata <- udata %>% filter(uniqueid == finalSubjects$uniqueid[i])
+  
+  for (j in 0:max_trials[1]){
+    # Extract trial data
+    tdata <- sdata %>% filter(trial_number == j)
+    
+    nSelectionEvents = tdata %>% filter(trial_event == "practice_pix") %>% count()
+    nRdkEvents = tdata %>% filter(trial_event == "subtask") %>% select(dot_difficulty) %>% unique() %>% count()
+    
+    if (nRdkEvents <= nSelectionEvents){ # do nothing
+    } else {
+      # Add current subject, condition, phase, and trial to the list of troublesome trials      
+      troubleMakers[rcnt, ] = c(tdata$condition[1], tdata$uniqueid[1], tdata$phase[1], tdata$trial_number[1])
+      rcnt = rcnt + 1
+    }
+  
+  cnt = cnt + 1
+  setTxtProgressBar(pb, cnt)
+  }
+}
+
+
+cnt = 1
+total = sum(final_n$n) * 30
+pb <- txtProgressBar(min = 0, max = total, style = 3)
+# Cycle through untimed data first
+for (i in 1:sum(final_n$n)){
+  # Extract subject data
+  sdata <- ddata %>% filter(uniqueid == finalSubjects$uniqueid[i])
+  
+  for (j in 0:max_trials[2]){
+    # Extract trial data
+    tdata <- sdata %>% filter(trial_number == j)
+    
+    nSelectionEvents = tdata %>% filter(trial_event == "select_pix") %>% count()
+    nRdkEvents = tdata %>% filter(trial_event == "subtask") %>% select(dot_difficulty) %>% unique() %>% count()
+    
+    if (nRdkEvents <= nSelectionEvents){ # do nothing
+    } else {
+      # Add current subject, condition, phase, and trial to the list of troublesome trials      
+      troubleMakers[rcnt, ] = c(tdata$condition[1], tdata$uniqueid[1], tdata$phase[1], tdata$trial_number[1])
+      rcnt = rcnt + 1
+    }
+  
+  cnt = cnt + 1
+  setTxtProgressBar(pb, cnt)
+  }
+}
+```

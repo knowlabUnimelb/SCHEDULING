@@ -1,0 +1,22 @@
+Column,Type,Null,Default,Comments
+experiment,character,Yes,NULL,experiment name
+subject_id,integer,Yes,NULL,random subject number (not used)
+unique_id,integer,Yes,NULL,sona generated unique id number
+condition,character,Yes,NULL,"condition name (""words"")"
+trial_event,factor,Yes,NULL,"event details: demographics, practice_rdk or select_rdk (these are the selection screens); typing_test is the typing task screen"
+trial_number,integer,Yes,NULL,"trial number: untimed practice (0-9), timed experiment (0-29) -  (note that several things happen on one trial)"
+trial_index,integer,Yes,NULL,trial index (jspsych specific number - different for each jspsych event)
+rt,numeric,Yes,NULL,response time (msec)
+difficulty,numeric,Yes,NULL,"selected task difficulty (1 = easy, 4 = very hard)"
+responses,character,Yes,NULL,responses to demographic question
+typed_accuracy,character,Yes,NULL,typing task accuracy of each typed letter
+typed_strings,character,Yes,NULL,typed strings
+typed_times,character,Yes,NULL,times for each key press
+average,numeric,Yes,NULL,average_wpm
+patch_0,numeric,Yes,NULL,difficulty of West patch
+patch_1,numeric,Yes,NULL,difficulty of North patch
+patch_2,numeric,Yes,NULL,difficulty of East patch
+patch_3,numeric,Yes,NULL,difficulty of South patch
+browser_window_height,numeric,Yes,NULL,browser size H
+browser_window_width,numeric,Yes,NULL,browser size W
+start_date,character,Yes,NULL,date and time onset of each trial
