@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="knowlabUnimelb" />
+
+<meta name="date" content="2022-04-10" />
+
+<title>2022 Schedule RT - Experiment 8c: Labelled Word List Typing, 4 Tasks - Wordle Reward - Better Instructions</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">SCHEDULING</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">2022 Schedule RT - Experiment 8c: Labelled
+Word List Typing, 4 Tasks - Wordle Reward - Better Instructions</h1>
+<h4 class="author">knowlabUnimelb</h4>
+<h4 class="date">2022-04-10</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-11-09
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>SCHEDULING/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20221107code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20221107)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20221107code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20221107)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong67e1aac">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 67e1aac
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong67e1aac"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 67e1aac.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/patch_selection.png
+    Ignored:    analysis/patch_selection_8.png
+    Ignored:    analysis/patch_selection_avg.png
+
+Untracked files:
+    Untracked:  analysis/Notes.txt
+    Untracked:  analysis/archive/
+    Untracked:  analysis/fd_pl.rds
+    Untracked:  analysis/fu_pl.rds
+    Untracked:  analysis/prereg/
+    Untracked:  analysis/reward rate analysis.docx
+    Untracked:  analysis/rewardRate.jpg
+    Untracked:  analysis/toAnalyse/
+    Untracked:  analysis/wflow_code_string.txt
+    Untracked:  archive/
+    Untracked:  data/archive/
+    Untracked:  data/create_database.sql
+    Untracked:  data/dataToAnalyse/
+    Untracked:  data/exp6a_typing_exponential.xlsx
+    Untracked:  data/exp6b_typing_linear.xlsx
+    Untracked:  data/rawdata_incEmails/
+    Untracked:  data/sona data/
+    Untracked:  data/summaryFiles/
+    Untracked:  models/
+    Untracked:  old Notes on analysis.txt
+    Untracked:  presentations/
+    Untracked:  references/
+    Untracked:  spatial_pdist.Rdata
+
+Unstaged changes:
+    Modified:   data/README.md
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/analysis_exp8c_typing_reward_instructions.Rmd</code>)
+and HTML
+(<code>docs/analysis_exp8c_typing_reward_instructions.html</code>)
+files. If you’ve configured a remote Git repository (see
+<code>?wflow_git_remote</code>), click on the hyperlinks in the table
+below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+67e1aac
+</td>
+<td>
+knowlabUnimelb
+</td>
+<td>
+2022-11-09
+</td>
+<td>
+Publish data and analysis files
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>Asha Bartlett<sup>1</sup>, Ami Eidels<sup>2</sup>, and Daniel R.
+Little<sup>1</sup> <sup>1</sup> The University of Melbourne,
+<sup>2</sup> The University of Newcastle</p>
+<div id="method" class="section level1">
+<h1>Method</h1>
+<div id="participants" class="section level2">
+<h2>Participants</h2>
+<p>[NEED TO ADD A SUMMARY OF PARTICIPANT INFORMATION: HOW MANY TESTED,
+DEMOGRAPHIC INFORMATION, HOW WERE PARTICIPANTS REIMBURSED, HOW MANY
+ASSIGNED TO EACH CONDITION]</p>
+</div>
+<div id="design" class="section level2">
+<h2>Design</h2>
+<p>[NEED TO ADD A DESCRIPTION OF THE EXPERIMENTAL DESIGN]</p>
+<p><em>Data Cleaning</em></p>
+<p>Subjects completed the experiment by clicking a link with the
+uniquely generated id code. Subjects were able to use the link multiple
+times; further, subjects were able to exit the experiment at any time.
+Consequently, the datafile contains partially completed data for some
+subjects which needed to be identified and removed.</p>
+</div>
+</div>
+<div id="data-analysis" class="section level1">
+<h1>Data Analysis</h1>
+<p>We first summarize performance by answering the following
+questions:</p>
+<div id="task-completions" class="section level2">
+<h2>Task completions</h2>
+<ul>
+<li>How many tasks are completed on average?</li>
+</ul>
+<p>[ADD ANALYSIS DESCRIPTION]</p>
+<table>
+<caption>Average number of correctly completed tasks in each
+condition</caption>
+<thead>
+<tr class="header">
+<th align="left">phase</th>
+<th align="right">mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">untimed</td>
+<td align="right">3.991489</td>
+</tr>
+<tr class="even">
+<td align="left">deadline</td>
+<td align="right">2.602128</td>
+</tr>
+</tbody>
+</table>
+<p>[ADD DESCRIPTION OF ANALYSIS OF TASK COMPLETIONS]</p>
+</div>
+<div id="typing-analysis" class="section level2">
+<h2>Typing analysis</h2>
+<table>
+<caption>Typing data analysis</caption>
+<thead>
+<tr class="header">
+<th align="right">length</th>
+<th align="left">phase</th>
+<th align="right">acc</th>
+<th align="right">rt</th>
+<th align="right">wpm</th>
+<th align="right">totalTime</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">untimed</td>
+<td align="right">0.95</td>
+<td align="right">184</td>
+<td align="right">70</td>
+<td align="right">1053</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">untimed</td>
+<td align="right">0.95</td>
+<td align="right">217</td>
+<td align="right">70</td>
+<td align="right">2828</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">untimed</td>
+<td align="right">0.95</td>
+<td align="right">209</td>
+<td align="right">70</td>
+<td align="right">4331</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">untimed</td>
+<td align="right">0.94</td>
+<td align="right">216</td>
+<td align="right">70</td>
+<td align="right">6092</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">deadline</td>
+<td align="right">0.95</td>
+<td align="right">172</td>
+<td align="right">75</td>
+<td align="right">978</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">deadline</td>
+<td align="right">0.94</td>
+<td align="right">195</td>
+<td align="right">75</td>
+<td align="right">2652</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">deadline</td>
+<td align="right">0.93</td>
+<td align="right">196</td>
+<td align="right">78</td>
+<td align="right">4230</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">deadline</td>
+<td align="right">0.93</td>
+<td align="right">196</td>
+<td align="right">75</td>
+<td align="right">5712</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Typing data analysis - standard error</caption>
+<thead>
+<tr class="header">
+<th align="right">length</th>
+<th align="left">phase</th>
+<th align="right">acc</th>
+<th align="right">rt</th>
+<th align="right">wpm</th>
+<th align="right">totalTime</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">untimed</td>
+<td align="right">0.01</td>
+<td align="right">4.0</td>
+<td align="right">0.68</td>
+<td align="right">36</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">untimed</td>
+<td align="right">0.00</td>
+<td align="right">15.4</td>
+<td align="right">0.69</td>
+<td align="right">189</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">untimed</td>
+<td align="right">0.00</td>
+<td align="right">3.0</td>
+<td align="right">0.68</td>
+<td align="right">79</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">untimed</td>
+<td align="right">0.00</td>
+<td align="right">3.1</td>
+<td align="right">0.68</td>
+<td align="right">101</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">deadline</td>
+<td align="right">0.00</td>
+<td align="right">2.6</td>
+<td align="right">0.47</td>
+<td align="right">23</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">deadline</td>
+<td align="right">0.00</td>
+<td align="right">2.4</td>
+<td align="right">0.51</td>
+<td align="right">43</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">deadline</td>
+<td align="right">0.00</td>
+<td align="right">6.8</td>
+<td align="right">0.47</td>
+<td align="right">222</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">deadline</td>
+<td align="right">0.00</td>
+<td align="right">1.8</td>
+<td align="right">0.42</td>
+<td align="right">72</td>
+</tr>
+</tbody>
+</table>
+<p>ANOVA Table (type III tests)</p>
+<p>$ANOVA Effect DFn DFd F p p&lt;.05 ges 1 phase 1 43 4.92 3.2e-02 *
+0.007 2 length 3 129 10.75 2.3e-06 * 0.044 3 phase:length 3 129 0.55
+6.5e-01 0.002</p>
+<p>$<code>Mauchly's Test for Sphericity</code> Effect W p p&lt;.05 1
+length 0.28 2.7e-10 <em> 2 phase:length 0.14 1.7e-16 </em></p>
+<p>$<code>Sphericity Corrections</code> Effect GGe DF[GG] p[GG]
+p[GG]&lt;.05 HFe DF[HF] p[HF] 1 length 0.54 1.64, 70.33 0.00023 * 0.56
+1.69, 72.73 0.00019 2 phase:length 0.48 1.43, 61.61 0.52300 0.49 1.47,
+63.15 0.52700 p[HF]&lt;.05 1 * 2</p>
+<p>ANOVA Table (type III tests)</p>
+<p>$ANOVA Effect DFn DFd F p p&lt;.05 ges 1 phase 1 43 13.0 0.00082 *
+0.031 2 length 3 129 4.4 0.00500 * 0.028 3 phase:length 3 129 2.2
+0.09600 0.012</p>
+<p>$<code>Mauchly's Test for Sphericity</code> Effect W p p&lt;.05 1
+length 0.94 0.80<br />
+2 phase:length 0.88 0.39</p>
+<p>$<code>Sphericity Corrections</code> Effect GGe DF[GG] p[GG]
+p[GG]&lt;.05 HFe DF[HF] p[HF] 1 length 0.96 2.88, 124.05 0.006 * 1.04
+3.11, 133.92 0.005 2 phase:length 0.92 2.77, 119.09 0.101 0.99 2.98,
+128.11 0.096 p[HF]&lt;.05 1 * 2</p>
+<p>ANOVA Table (type III tests)</p>
+<p>$ANOVA Effect DFn DFd F p p&lt;.05 ges 1 phase 1 43 48.0 1.6e-08 *
+2.0e-02 2 length 3 129 22.5 8.8e-12 * 3.0e-04 3 phase:length 3 129 2.6
+5.8e-02 4.1e-05</p>
+<p>$<code>Mauchly's Test for Sphericity</code> Effect W p p&lt;.05 1
+length 0.79 0.078<br />
+2 phase:length 0.87 0.325</p>
+<p>$<code>Sphericity Corrections</code> Effect GGe DF[GG] p[GG]
+p[GG]&lt;.05 HFe DF[HF] p[HF] 1 length 0.85 2.55, 109.78 2.4e-10 * 0.91
+2.73, 117.3 6.5e-11 2 phase:length 0.92 2.75, 118.28 6.4e-02 0.99 2.96,
+127.16 5.9e-02 p[HF]&lt;.05 1 * 2</p>
+<p>ANOVA Table (type III tests)</p>
+<p>$ANOVA Effect DFn DFd F p p&lt;.05 ges 1 phase 1 43 0.50 4.8e-01
+0.00062 2 length 3 129 390.14 1.7e-64 * 0.71900 3 phase:length 3 129
+0.60 6.1e-01 0.00200</p>
+<p>$<code>Mauchly's Test for Sphericity</code> Effect W p p&lt;.05 1
+length 0.70 1.0e-02 <em> 2 phase:length 0.44 2.7e-06 </em></p>
+<p>$<code>Sphericity Corrections</code> Effect GGe DF[GG] p[GG]
+p[GG]&lt;.05 HFe DF[HF] p[HF] 1 length 0.80 2.39, 102.9 5.6e-52 * 0.85
+2.54, 109.39 4.4e-55 2 phase:length 0.72 2.15, 92.5 5.6e-01 0.76 2.27,
+97.53 5.7e-01 p[HF]&lt;.05 1 * 2</p>
+</div>
+<div id="reward-rate" class="section level2">
+<h2>Reward Rate</h2>
+<p>[ADD DESCRIPTION]</p>
+<p><img src="figure/analysis_exp8c_typing_reward_instructions.Rmd/rewardRate_plot-1.png" width="672" style="display: block; margin: auto;" />ANOVA
+Table (type III tests)</p>
+<p>$ANOVA Effect DFn DFd F p p&lt;.05 ges 1 phase 1 43 0.83 3.7e-01
+0.00075 2 difficulty 3 129 705.99 8.0e-80 * 0.81300 3 phase:difficulty 3
+129 0.23 8.8e-01 0.00045</p>
+<p>$<code>Mauchly's Test for Sphericity</code> Effect W p p&lt;.05 1
+difficulty 0.17 1.0e-14 <em> 2 phase:difficulty 0.51 3.6e-05 </em></p>
+<p>$<code>Sphericity Corrections</code> Effect GGe DF[GG] p[GG]
+p[GG]&lt;.05 HFe DF[HF] p[HF] 1 difficulty 0.49 1.47, 63.27 1.8e-40 *
+0.50 1.51, 64.96 1.7e-41 2 phase:difficulty 0.73 2.19, 94.32 8.2e-01
+0.77 2.32, 99.59 8.3e-01 p[HF]&lt;.05 1 * 2</p>
+<pre><code>Pairwise comparisons using t tests with pooled SD </code></pre>
+<p>data: rrdata<span class="math inline">\(rewardRate and
+paste(rrdata\)</span>difficulty, rrdata$phase)</p>
+<pre><code>            long deadline long untimed med deadline med untimed</code></pre>
+<p>long untimed 1 - - -<br />
+med deadline &lt;2e-16 &lt;2e-16 - -<br />
+med untimed &lt;2e-16 &lt;2e-16 1 -<br />
+short deadline &lt;2e-16 &lt;2e-16 3e-12 3e-12<br />
+short untimed &lt;2e-16 &lt;2e-16 6e-13 5e-13<br />
+v.long deadline 4e-13 1e-13 &lt;2e-16 &lt;2e-16<br />
+v.long untimed 1e-11 4e-12 &lt;2e-16 &lt;2e-16<br />
+short deadline short untimed v.long deadline long untimed - - -<br />
+med deadline - - -<br />
+med untimed - - -<br />
+short deadline - - -<br />
+short untimed 1 - -<br />
+v.long deadline &lt;2e-16 &lt;2e-16 -<br />
+v.long untimed &lt;2e-16 &lt;2e-16 1</p>
+<p>P value adjustment method: bonferroni</p>
+</div>
+<div id="optimality-in-each-condition" class="section level2">
+<h2>Optimality in each condition</h2>
+<ul>
+<li>What is the proportion of easy, medium, hard, and very hard tasks
+selected first, second, third or fourth? [ADD DESCRIPTION]</li>
+</ul>
+<p><img src="figure/analysis_exp8c_typing_reward_instructions.Rmd/heatmap_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Do the marginal distributions differ from uniformity?</li>
+</ul>
+<p>We tested whether the marginal distributions were different from
+uniformly random selection using the fact that the mean rank is
+distributed according to a <span class="math inline">\(\chi^2\)</span>
+distribution with the following test-statistic: <span
+class="math display">\[\chi^2 = \frac{12N}{k(k+1)}\sum_{j=1}^k \left(m_j
+- \frac{k+1}{2} \right)^2\]</span> see (Marden, 1995).</p>
+<table>
+<caption>Chi2 test of uniformity</caption>
+<thead>
+<tr class="header">
+<th align="left">phase</th>
+<th align="right">chi2</th>
+<th align="right">df</th>
+<th align="right">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">untimed</td>
+<td align="right">5.9</td>
+<td align="right">3</td>
+<td align="right">0.05</td>
+</tr>
+<tr class="even">
+<td align="left">deadline</td>
+<td align="right">1068.1</td>
+<td align="right">3</td>
+<td align="right">0.00</td>
+</tr>
+</tbody>
+</table>
+<p>[ADD DESCRIPTION]</p>
+<p>We compared the location conditions and phases using chi-2
+analysis.</p>
+<table>
+<caption>Pearson’s chi-squared test</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Comparison</th>
+<th align="right">chi2</th>
+<th align="right">df</th>
+<th align="right">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">X-squared</td>
+<td align="left">Untimed vs Deadline</td>
+<td align="right">464</td>
+<td align="right">15</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>How optimal were responses?</li>
+</ul>
+<p><img src="figure/analysis_exp8c_typing_reward_instructions.Rmd/plotData-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="comparison-against-easy-to-hard-order" class="section level2">
+<h2>Comparison against Easy to Hard order</h2>
+<ul>
+<li>How consistent were responses with an easy to hard ordering?</li>
+</ul>
+<p><img src="figure/analysis_exp8c_typing_reward_instructions.Rmd/plotData_eh-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="wordle-clue-score-analysis" class="section level2">
+<h2>Wordle-Clue Score Analysis</h2>
+<ul>
+<li>How motivated are participants to get the Wordle-Clue guess
+correct?</li>
+</ul>
+<p>Wordle guesses are scored out of 10. A match-in-place is scored 2; a
+match-out-of-place is scored 1. The final score for each trial is the
+sum across all letters.</p>
+<table>
+<caption>Average Wordle Scores (Max Score = 10)</caption>
+<thead>
+<tr class="header">
+<th align="left">phase</th>
+<th align="right">score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">untimed</td>
+<td align="right">6.0</td>
+</tr>
+<tr class="even">
+<td align="left">deadline</td>
+<td align="right">4.5</td>
+</tr>
+</tbody>
+</table>
+<pre><code>        Df Sum Sq Mean Sq F value  Pr(&gt;F)    </code></pre>
+<p>phase 1 57.1 57.1 23.6 4.9e-06 *** Residuals 92 223.1 2.4<br />
+— Signif. codes: 0 ‘<em><strong>’ 0.001 ’</strong>’ 0.01 ’</em>’ 0.05
+‘.’ 0.1 ’ ’ 1</p>
+<ul>
+<li>What is the correlation between the Wordle-Clue score and the
+distance from the optimal schedule? From the easy-hard schedule?</li>
+</ul>
+<p>This test indicates whether participants who are more motivated to
+score highly on the wordle test are also more likely to selection
+optimal schedules. This would be indicated by a significant correlation
+(high wordle score coupled with a low average distance). We also test
+the same wordle score compared to the easy-hard schedule.</p>
+<p><img src="figure/analysis_exp8c_typing_reward_instructions.Rmd/correlateWordleWithDistance-1.png" width="672" style="display: block; margin: auto;" />[1]
+-0.35</p>
+<pre><code>Pearson&#39;s product-moment correlation</code></pre>
+<p>data: corrDataSet<span class="math inline">\(wordleScore and
+corrDataSet\)</span>d t = -4, df = 92, p-value = 5e-04 alternative
+hypothesis: true correlation is not equal to 0 95 percent confidence
+interval: -0.52 -0.16 sample estimates: cor -0.35</p>
+<p><img src="figure/analysis_exp8c_typing_reward_instructions.Rmd/correlateWordleWithDistance-2.png" width="672" style="display: block; margin: auto;" />[1]
+0.081</p>
+<pre><code>Pearson&#39;s product-moment correlation</code></pre>
+<p>data: corrDataSet<span
+class="math inline">\(wordleScore[corrDataSet\)</span>phase ==
+“untimed”] and corrDataSet<span
+class="math inline">\(d[corrDataSet\)</span>phase == “untimed”] t = 0.5,
+df = 45, p-value = 0.6 alternative hypothesis: true correlation is not
+equal to 0 95 percent confidence interval: -0.21 0.36 sample estimates:
+cor 0.081</p>
+<p><img src="figure/analysis_exp8c_typing_reward_instructions.Rmd/correlateWordleWithDistance-3.png" width="672" style="display: block; margin: auto;" />[1]
+-0.83</p>
+<pre><code>Pearson&#39;s product-moment correlation</code></pre>
+<p>data: corrDataSet<span
+class="math inline">\(wordleScore[corrDataSet\)</span>phase ==
+“deadline”] and corrDataSet<span
+class="math inline">\(d[corrDataSet\)</span>phase == “deadline”] t =
+-10, df = 45, p-value = 6e-13 alternative hypothesis: true correlation
+is not equal to 0 95 percent confidence interval: -0.90 -0.71 sample
+estimates: cor -0.83</p>
+<p><img src="figure/analysis_exp8c_typing_reward_instructions.Rmd/correlateWordleWithDistance-4.png" width="672" style="display: block; margin: auto;" />[1]
+0.35</p>
+<pre><code>Pearson&#39;s product-moment correlation</code></pre>
+<p>data: corrDataSet<span class="math inline">\(wordleScore and
+corrDataSet\)</span>eh_d t = 4, df = 92, p-value = 5e-04 alternative
+hypothesis: true correlation is not equal to 0 95 percent confidence
+interval: 0.16 0.52 sample estimates: cor 0.35</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.3 (2022-03-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19042)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_Australia.1252  LC_CTYPE=English_Australia.1252   
+[3] LC_MONETARY=English_Australia.1252 LC_NUMERIC=C                      
+[5] LC_TIME=English_Australia.1252    
+
+attached base packages:
+[1] stats4    grid      stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] pmr_1.2.5.1       jpeg_0.1-9        rstatix_0.7.0     lme4_1.1-29      
+ [5] Matrix_1.4-0      png_0.1-7         reshape2_1.4.4    knitr_1.38       
+ [9] hrbrthemes_0.8.0  english_1.2-6     gtools_3.9.2      DescTools_0.99.45
+[13] forcats_0.5.1     stringr_1.4.0     dplyr_1.0.8       purrr_0.3.4      
+[17] readr_2.1.2       tidyr_1.2.0       tibble_3.1.6      ggplot2_3.3.5    
+[21] tidyverse_1.3.1   workflowr_1.7.0  
+
+loaded via a namespace (and not attached):
+ [1] minqa_1.2.4       colorspace_2.0-3  ellipsis_0.3.2    class_7.3-20     
+ [5] rprojroot_2.0.3   fs_1.5.2          gld_2.6.5         rstudioapi_0.13  
+ [9] proxy_0.4-27      farver_2.1.0      fansi_1.0.3       mvtnorm_1.1-3    
+[13] lubridate_1.8.0   xml2_1.3.3        splines_4.1.3     extrafont_0.18   
+[17] rootSolve_1.8.2.3 jsonlite_1.8.0    nloptr_2.0.0      broom_0.8.0      
+[21] Rttf2pt1_1.3.10   dbplyr_2.1.1      compiler_4.1.3    httr_1.4.2       
+[25] backports_1.4.1   assertthat_0.2.1  fastmap_1.1.0     cli_3.2.0        
+[29] later_1.3.0       htmltools_0.5.2   tools_4.1.3       gtable_0.3.0     
+[33] glue_1.6.2        lmom_2.9          Rcpp_1.0.8.3      carData_3.0-5    
+[37] cellranger_1.1.0  jquerylib_0.1.4   vctrs_0.4.1       nlme_3.1-155     
+[41] extrafontdb_1.0   xfun_0.30         ps_1.6.0          rvest_1.0.2      
+[45] lifecycle_1.0.1   getPass_0.2-2     MASS_7.3-55       scales_1.2.0     
+[49] hms_1.1.1         promises_1.2.0.1  expm_0.999-6      yaml_2.3.5       
+[53] Exact_3.1         gdtools_0.2.4     sass_0.4.1        stringi_1.7.6    
+[57] highr_0.9         e1071_1.7-11      boot_1.3-28       rlang_1.0.2      
+[61] pkgconfig_2.0.3   systemfonts_1.0.4 evaluate_0.15     lattice_0.20-45  
+[65] labeling_0.4.2    processx_3.5.3    tidyselect_1.1.2  plyr_1.8.7       
+[69] magrittr_2.0.3    R6_2.5.1          generics_0.1.2    DBI_1.1.2        
+[73] pillar_1.7.0      haven_2.5.0       whisker_0.4       withr_2.5.0      
+[77] abind_1.4-5       modelr_0.1.8      crayon_1.5.1      car_3.0-12       
+[81] utf8_1.2.2        tzdb_0.3.0        rmarkdown_2.13    readxl_1.4.0     
+[85] data.table_1.14.2 callr_3.7.0       git2r_0.30.1      reprex_2.0.1     
+[89] digest_0.6.29     httpuv_1.6.5      munsell_0.5.0     bslib_0.3.1      </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

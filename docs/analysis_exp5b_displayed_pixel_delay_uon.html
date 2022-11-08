@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="knowlabUnimelb" />
+
+<meta name="date" content="2021-09-17" />
+
+<title>Experiment 5b: Displayed Brightness Judgement, 4 Tasks, 500 msec Error Penalty</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">SCHEDULING</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Experiment 5b: Displayed Brightness
+Judgement, 4 Tasks, 500 msec Error Penalty</h1>
+<h4 class="author">knowlabUnimelb</h4>
+<h4 class="date">2021-09-17</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-11-09
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>SCHEDULING/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20221107code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20221107)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20221107code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20221107)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong67e1aac">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 67e1aac
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong67e1aac"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 67e1aac.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/patch_selection.png
+    Ignored:    analysis/patch_selection_8.png
+    Ignored:    analysis/patch_selection_avg.png
+
+Untracked files:
+    Untracked:  analysis/Notes.txt
+    Untracked:  analysis/archive/
+    Untracked:  analysis/fd_pl.rds
+    Untracked:  analysis/fu_pl.rds
+    Untracked:  analysis/prereg/
+    Untracked:  analysis/reward rate analysis.docx
+    Untracked:  analysis/rewardRate.jpg
+    Untracked:  analysis/toAnalyse/
+    Untracked:  analysis/wflow_code_string.txt
+    Untracked:  archive/
+    Untracked:  data/archive/
+    Untracked:  data/create_database.sql
+    Untracked:  data/dataToAnalyse/
+    Untracked:  data/exp6a_typing_exponential.xlsx
+    Untracked:  data/exp6b_typing_linear.xlsx
+    Untracked:  data/rawdata_incEmails/
+    Untracked:  data/sona data/
+    Untracked:  data/summaryFiles/
+    Untracked:  models/
+    Untracked:  old Notes on analysis.txt
+    Untracked:  presentations/
+    Untracked:  references/
+    Untracked:  spatial_pdist.Rdata
+
+Unstaged changes:
+    Modified:   data/README.md
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/analysis_exp5b_displayed_pixel_delay_uon.Rmd</code>) and
+HTML (<code>docs/analysis_exp5b_displayed_pixel_delay_uon.html</code>)
+files. If you’ve configured a remote Git repository (see
+<code>?wflow_git_remote</code>), click on the hyperlinks in the table
+below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+67e1aac
+</td>
+<td>
+knowlabUnimelb
+</td>
+<td>
+2022-11-09
+</td>
+<td>
+Publish data and analysis files
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>Ruby Steinberg<sup>1</sup>, Ami Eidels<sup>2</sup>, and Daniel R.
+Little<sup>1</sup></p>
+<p><sup>1</sup> The University of Melbourne, <sup>2</sup> The University
+of Newcastle</p>
+<div id="method" class="section level1">
+<h1>Method</h1>
+<div id="participants" class="section level2">
+<h2>Participants</h2>
+<p>[NEED TO ADD A SUMMARY OF PARTICIPOANT INFORMATION: HOW MANY TESTED,
+DEMOGRAPHIC INFORMATION, HOW WERE PARTICIPANTS REIMBURSED, HOW MANY
+ASSIGNED TO EACH CONDITION]</p>
+</div>
+<div id="design" class="section level2">
+<h2>Design</h2>
+<p>[NEED TO ADD A DESCRIPTION OF THE EXPERIMENTAL DESIGN]</p>
+<p><em>Data Cleaning</em></p>
+<p>Subjects completed the experiment by clicking a link with the
+uniquely generated id code. Subjects were able to use the link multiple
+times; further, subjects were able to exit the experiment at any time.
+Consequently, the datafile contains partially completed data for some
+subjects which needed to be identified and removed.</p>
+<p>[NEED TO ADD A DESCRIPTION OF THE NONLEARNERS]</p>
+</div>
+</div>
+<div id="data-analysis" class="section level1">
+<h1>Data Analysis</h1>
+<p>We first summarize performance by answering the following
+questions:</p>
+<div id="task-completions" class="section level2">
+<h2>Task completions</h2>
+<ul>
+<li>How many tasks are completed on average?</li>
+</ul>
+<p>[ADD ANALYSIS DESCRIPTION]</p>
+<table>
+<caption>Average number of correctly completed tasks in each
+condition</caption>
+<thead>
+<tr class="header">
+<th align="left">condition</th>
+<th align="left">phase</th>
+<th align="right">mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">fixed</td>
+<td align="left">untimed</td>
+<td align="right">3.872727</td>
+</tr>
+<tr class="even">
+<td align="left">fixed</td>
+<td align="left">deadline</td>
+<td align="right">3.317278</td>
+</tr>
+<tr class="odd">
+<td align="left">random</td>
+<td align="left">untimed</td>
+<td align="right">3.846667</td>
+</tr>
+<tr class="even">
+<td align="left">random</td>
+<td align="left">deadline</td>
+<td align="right">3.048315</td>
+</tr>
+</tbody>
+</table>
+<p>[ADD DESCRIPTION OF ANALYSIS OF TASK COMPLETIONS]</p>
+</div>
+<div id="rdk-performance" class="section level2">
+<h2>RDK performance</h2>
+<p>We next analysed performance on the RDK discriminations. We then
+asked:</p>
+<ul>
+<li>What was the average completion time and accuracy of the easy,
+medium, hard, and very hard tasks?</li>
+</ul>
+<p>[ADD DESCRIPTION OF PLOT]</p>
+<p><img src="figure/analysis_exp5b_displayed_pixel_delay_uon.Rmd/difficulty_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>[ADD DESCRIPTION OF PLOT]</p>
+<p><img src="figure/analysis_exp5b_displayed_pixel_delay_uon.Rmd/difficulty_sum_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We further broke down RTs by condition, deadline, and difficulty.</p>
+<table>
+<caption>Mean accuracy, RT, and RT summed across attempts for each
+difficulty and each phase</caption>
+<colgroup>
+<col width="11%" />
+<col width="10%" />
+<col width="12%" />
+<col width="5%" />
+<col width="14%" />
+<col width="12%" />
+<col width="8%" />
+<col width="6%" />
+<col width="10%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">condition</th>
+<th align="left">phase</th>
+<th align="left">difficulty</th>
+<th align="right">n</th>
+<th align="right">Mean.Correct</th>
+<th align="right">SE.Correct</th>
+<th align="right">Mean.RT</th>
+<th align="right">SE.RT</th>
+<th align="right">Mean.crt</th>
+<th align="right">SE.crt</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">fixed</td>
+<td align="left">untimed</td>
+<td align="left">easy</td>
+<td align="right">655</td>
+<td align="right">0.67</td>
+<td align="right">0.02</td>
+<td align="right">1174.72</td>
+<td align="right">56.64</td>
+<td align="right">1764.78</td>
+<td align="right">84.57</td>
+</tr>
+<tr class="even">
+<td align="left">fixed</td>
+<td align="left">untimed</td>
+<td align="left">medium</td>
+<td align="right">668</td>
+<td align="right">0.64</td>
+<td align="right">0.02</td>
+<td align="right">1067.83</td>
+<td align="right">44.96</td>
+<td align="right">1651.18</td>
+<td align="right">73.32</td>
+</tr>
+<tr class="odd">
+<td align="left">fixed</td>
+<td align="left">untimed</td>
+<td align="left">hard</td>
+<td align="right">747</td>
+<td align="right">0.56</td>
+<td align="right">0.02</td>
+<td align="right">979.09</td>
+<td align="right">39.61</td>
+<td align="right">1724.96</td>
+<td align="right">75.35</td>
+</tr>
+<tr class="even">
+<td align="left">fixed</td>
+<td align="left">untimed</td>
+<td align="left">v. hard</td>
+<td align="right">777</td>
+<td align="right">0.54</td>
+<td align="right">0.02</td>
+<td align="right">978.84</td>
+<td align="right">31.95</td>
+<td align="right">1793.77</td>
+<td align="right">68.33</td>
+</tr>
+<tr class="odd">
+<td align="left">fixed</td>
+<td align="left">deadline</td>
+<td align="left">easy</td>
+<td align="right">1686</td>
+<td align="right">0.70</td>
+<td align="right">0.01</td>
+<td align="right">501.44</td>
+<td align="right">8.93</td>
+<td align="right">708.06</td>
+<td align="right">14.83</td>
+</tr>
+<tr class="even">
+<td align="left">fixed</td>
+<td align="left">deadline</td>
+<td align="left">medium</td>
+<td align="right">1695</td>
+<td align="right">0.69</td>
+<td align="right">0.01</td>
+<td align="right">484.05</td>
+<td align="right">7.69</td>
+<td align="right">684.29</td>
+<td align="right">12.80</td>
+</tr>
+<tr class="odd">
+<td align="left">fixed</td>
+<td align="left">deadline</td>
+<td align="left">hard</td>
+<td align="right">1679</td>
+<td align="right">0.63</td>
+<td align="right">0.01</td>
+<td align="right">490.21</td>
+<td align="right">7.46</td>
+<td align="right">736.20</td>
+<td align="right">14.81</td>
+</tr>
+<tr class="even">
+<td align="left">fixed</td>
+<td align="left">deadline</td>
+<td align="left">v. hard</td>
+<td align="right">1693</td>
+<td align="right">0.55</td>
+<td align="right">0.01</td>
+<td align="right">453.66</td>
+<td align="right">7.11</td>
+<td align="right">744.96</td>
+<td align="right">14.09</td>
+</tr>
+<tr class="odd">
+<td align="left">random</td>
+<td align="left">untimed</td>
+<td align="left">easy</td>
+<td align="right">473</td>
+<td align="right">0.63</td>
+<td align="right">0.02</td>
+<td align="right">1309.72</td>
+<td align="right">77.94</td>
+<td align="right">2071.89</td>
+<td align="right">137.10</td>
+</tr>
+<tr class="even">
+<td align="left">random</td>
+<td align="left">untimed</td>
+<td align="left">medium</td>
+<td align="right">485</td>
+<td align="right">0.60</td>
+<td align="right">0.02</td>
+<td align="right">981.67</td>
+<td align="right">42.16</td>
+<td align="right">1630.51</td>
+<td align="right">73.62</td>
+</tr>
+<tr class="odd">
+<td align="left">random</td>
+<td align="left">untimed</td>
+<td align="left">hard</td>
+<td align="right">467</td>
+<td align="right">0.60</td>
+<td align="right">0.02</td>
+<td align="right">958.97</td>
+<td align="right">37.34</td>
+<td align="right">1571.37</td>
+<td align="right">69.63</td>
+</tr>
+<tr class="even">
+<td align="left">random</td>
+<td align="left">untimed</td>
+<td align="left">v. hard</td>
+<td align="right">520</td>
+<td align="right">0.54</td>
+<td align="right">0.02</td>
+<td align="right">990.58</td>
+<td align="right">40.24</td>
+<td align="right">1813.74</td>
+<td align="right">83.15</td>
+</tr>
+<tr class="odd">
+<td align="left">random</td>
+<td align="left">deadline</td>
+<td align="left">easy</td>
+<td align="right">1105</td>
+<td align="right">0.65</td>
+<td align="right">0.01</td>
+<td align="right">461.12</td>
+<td align="right">10.66</td>
+<td align="right">685.79</td>
+<td align="right">17.96</td>
+</tr>
+<tr class="even">
+<td align="left">random</td>
+<td align="left">deadline</td>
+<td align="left">medium</td>
+<td align="right">1110</td>
+<td align="right">0.61</td>
+<td align="right">0.01</td>
+<td align="right">438.70</td>
+<td align="right">9.17</td>
+<td align="right">685.85</td>
+<td align="right">16.83</td>
+</tr>
+<tr class="odd">
+<td align="left">random</td>
+<td align="left">deadline</td>
+<td align="left">hard</td>
+<td align="right">1090</td>
+<td align="right">0.62</td>
+<td align="right">0.01</td>
+<td align="right">468.62</td>
+<td align="right">10.08</td>
+<td align="right">720.44</td>
+<td align="right">19.38</td>
+</tr>
+<tr class="even">
+<td align="left">random</td>
+<td align="left">deadline</td>
+<td align="left">v. hard</td>
+<td align="right">1208</td>
+<td align="right">0.53</td>
+<td align="right">0.01</td>
+<td align="right">481.32</td>
+<td align="right">9.64</td>
+<td align="right">832.99</td>
+<td align="right">20.97</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="reward-rate" class="section level2">
+<h2>Reward Rate</h2>
+<p>[ADD DESCRIPTION]</p>
+<p><img src="figure/analysis_exp5b_displayed_pixel_delay_uon.Rmd/rewardRate_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="optimality-in-each-condition" class="section level2">
+<h2>Optimality in each condition</h2>
+<ul>
+<li>What is the proportion of easy, medium, hard, and very hard tasks
+selected first, second, third or fourth? [ADD DESCRIPTION]</li>
+</ul>
+<p><img src="figure/analysis_exp5b_displayed_pixel_delay_uon.Rmd/heatmap_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Do the marginal distributions differ from uniformity?</li>
+</ul>
+<p>We tested whether the marginal distributions were different from
+uniformally random selection using the fact that the mean rank is
+distributed according to a <span class="math inline">\(\chi^2\)</span>
+distribution with the following test-statistic: <span
+class="math display">\[\chi^2 = \frac{12N}{k(k+1)}\sum_{j=1}^k \left(m_j
+- \frac{k+1}{2} \right)^2\]</span> see (Marden, 1995).</p>
+<table>
+<caption>Chi2 test of uniformity</caption>
+<thead>
+<tr class="header">
+<th align="left">condition</th>
+<th align="left">phase</th>
+<th align="right">chi2</th>
+<th align="right">df</th>
+<th align="right">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">fixed</td>
+<td align="left">untimed</td>
+<td align="right">228.68</td>
+<td align="right">3</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">fixed</td>
+<td align="left">deadline</td>
+<td align="right">1230.64</td>
+<td align="right">3</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">random</td>
+<td align="left">untimed</td>
+<td align="right">33.46</td>
+<td align="right">3</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">random</td>
+<td align="left">deadline</td>
+<td align="right">5.96</td>
+<td align="right">3</td>
+<td align="right">0.05</td>
+</tr>
+</tbody>
+</table>
+<p>[ADD DESCRIPTION]</p>
+<p>We compared the location conditions and phases using chi-2
+analysis.</p>
+<table>
+<caption>Pearson’s chi-squared test</caption>
+<thead>
+<tr class="header">
+<th align="left">Comparison</th>
+<th align="right">chi2</th>
+<th align="right">df</th>
+<th align="right">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Fixed: Untimed vs Deadline</td>
+<td align="right">85.97</td>
+<td align="right">15</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">Random: Untimed vs Deadline</td>
+<td align="right">32.69</td>
+<td align="right">15</td>
+<td align="right">0.01</td>
+</tr>
+<tr class="odd">
+<td align="left">Untimed: Fixed vs Random</td>
+<td align="right">83.40</td>
+<td align="right">15</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">Deadline: Fixed vs Random</td>
+<td align="right">672.47</td>
+<td align="right">15</td>
+<td align="right">0.00</td>
+</tr>
+</tbody>
+</table>
+<!-- * We next ask whether the sequence of choices reflected the optimal order: What is the proportion of easy-task-first choices in each condition? Of easy-then-medium? Of easy-medium-then-hard? This provides an indication of how the order of responding deviates from optimal in each condition. The table presents the proportion of subjects responding with each order; the figure presents the frequency with which subjects respond with the easiest first RDK, easiest then medium, and so on. -->
+<ul>
+<li>How optimal were responses?</li>
+</ul>
+<p><img src="figure/analysis_exp5b_displayed_pixel_delay_uon.Rmd/plotData-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="selection-model" class="section level1">
+<h1>Selection model</h1>
+<p>We can treat each task selection as a probabilistic choice given by a
+Luce’s choice rule (Luce, 1959), where each task is represented by some
+strength, <span class="math inline">\(\nu\)</span>. The probability of
+selecting task <span class="math inline">\(i_j\)</span> from set <span
+class="math inline">\(S = \left{i_1, i_2, ..., i_J \right}\)</span>,
+where J is the number of tasks, is:</p>
+<p><span class="math display">\[p\left(i_j |S \right) =
+\frac{\nu_{i_j}}{\sum_{i \in S} \nu_{i}} \]</span>.</p>
+<p>Plackett (1975) generalised this model to explain the distribution
+over a sequence of choices (i.e., ranks). In this case, after each
+choice, the choice set is reduce by one (i.e., sampling without
+replacement). This probability of observing a specific selection order,
+<span class="math inline">\(i_1 \succ ... \succ i_J\)</span> is:</p>
+<p><span class="math display">\[p\left(i_j |A \right) = \prod_{j=1}^J
+\frac{\nu_{i_j}}{\sum_{i \in A_j} \nu_{i}} \]</span>,</p>
+<p>where <span class="math inline">\(A_j\)</span> is the current choice
+set.</p>
+<p><img src="figure/analysis_exp5b_displayed_pixel_delay_uon.Rmd/PLmodel-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="sampling-distribution-anlaysis" class="section level2">
+<h2>Sampling distribution anlaysis</h2>
+<p>In order to characterise performance, we examined three sampling
+distributions for comparison to our data. The first is the sampling
+distribution of edit distances from optimal assuming that orders are
+sampled uniformly at random. The second distribution assumes that the
+first choice was optimal but the remaining orders are sampled at random.
+Finally, the third distributions assumes that the first two choices are
+selected optimally but that the remaining are randomly selected. It is
+clear that the mode of the distribution moves from a distance of 3 to a
+distance of 0 as the sampling distribution summarises orders which
+better conform to optimality.</p>
+<p>To characterise the optimality of each condition at each point in the
+experiment, we first computed the ks-test statistic between the data
+(the average partial distance data) and the random order distribution
+and the first-two optimal distribution. Since smaller ks-statistics
+indicate a closer match between the distributions, we then took the
+ratio of the ks-statistics (random over first two-optimal). Values less
+than one indicate that the data are more consistent with random than
+optimal responding. Values greater than one indicate that the data are
+more consistent with optimal rather than random responding.</p>
+<p><img src="figure/analysis_exp5b_displayed_pixel_delay_uon.Rmd/sampling_dist-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/analysis_exp5b_displayed_pixel_delay_uon.Rmd/sampling_dist-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This figure efficiently summarises the main result: responding is
+more optimal in the fixed deadline condition particularly during the
+last ten trials; in the random deadline conditions, responding was
+closer to a random sampling distribution than to an optimal sampling
+distribution.</p>
+</div>
+<div id="selection-choice-rts" class="section level2">
+<h2>Selection Choice RTs</h2>
+<table>
+<caption>Mean RTs for each scheduling selection</caption>
+<thead>
+<tr class="header">
+<th align="left">condition</th>
+<th align="left">phase</th>
+<th align="right">mrt_sel1</th>
+<th align="right">mrt_sel2</th>
+<th align="right">mrt_sel3</th>
+<th align="right">mrt_sel4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">fixed</td>
+<td align="left">untimed</td>
+<td align="right">1687</td>
+<td align="right">1538</td>
+<td align="right">1285</td>
+<td align="right">1243</td>
+</tr>
+<tr class="even">
+<td align="left">fixed</td>
+<td align="left">deadline</td>
+<td align="right">714</td>
+<td align="right">767</td>
+<td align="right">701</td>
+<td align="right">640</td>
+</tr>
+<tr class="odd">
+<td align="left">random</td>
+<td align="left">untimed</td>
+<td align="right">1770</td>
+<td align="right">1660</td>
+<td align="right">1338</td>
+<td align="right">1212</td>
+</tr>
+<tr class="even">
+<td align="left">random</td>
+<td align="left">deadline</td>
+<td align="right">868</td>
+<td align="right">899</td>
+<td align="right">829</td>
+<td align="right">716</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>SD RTs for each scheduling selection</caption>
+<thead>
+<tr class="header">
+<th align="left">condition</th>
+<th align="left">phase</th>
+<th align="right">sd_sel1</th>
+<th align="right">sd_sel2</th>
+<th align="right">sd_sel3</th>
+<th align="right">sd_sel4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">fixed</td>
+<td align="left">untimed</td>
+<td align="right">27.533788</td>
+<td align="right">20.622770</td>
+<td align="right">15.329225</td>
+<td align="right">16.946697</td>
+</tr>
+<tr class="even">
+<td align="left">fixed</td>
+<td align="left">deadline</td>
+<td align="right">7.186723</td>
+<td align="right">8.307925</td>
+<td align="right">6.157423</td>
+<td align="right">4.484809</td>
+</tr>
+<tr class="odd">
+<td align="left">random</td>
+<td align="left">untimed</td>
+<td align="right">24.537788</td>
+<td align="right">22.828414</td>
+<td align="right">14.832955</td>
+<td align="right">9.943778</td>
+</tr>
+<tr class="even">
+<td align="left">random</td>
+<td align="left">deadline</td>
+<td align="right">8.399827</td>
+<td align="right">7.958698</td>
+<td align="right">6.947778</td>
+<td align="right">4.723754</td>
+</tr>
+</tbody>
+</table>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.3 (2022-03-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19042)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_Australia.1252  LC_CTYPE=English_Australia.1252   
+[3] LC_MONETARY=English_Australia.1252 LC_NUMERIC=C                      
+[5] LC_TIME=English_Australia.1252    
+
+attached base packages:
+[1] stats4    grid      stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] pmr_1.2.5.1       jpeg_0.1-9        rstatix_0.7.0     lme4_1.1-29      
+ [5] Matrix_1.4-0      png_0.1-7         reshape2_1.4.4    knitr_1.38       
+ [9] hrbrthemes_0.8.0  english_1.2-6     gtools_3.9.2      DescTools_0.99.45
+[13] forcats_0.5.1     stringr_1.4.0     dplyr_1.0.8       purrr_0.3.4      
+[17] readr_2.1.2       tidyr_1.2.0       tibble_3.1.6      ggplot2_3.3.5    
+[21] tidyverse_1.3.1   workflowr_1.7.0  
+
+loaded via a namespace (and not attached):
+ [1] minqa_1.2.4       colorspace_2.0-3  ellipsis_0.3.2    class_7.3-20     
+ [5] rprojroot_2.0.3   fs_1.5.2          gld_2.6.5         rstudioapi_0.13  
+ [9] proxy_0.4-27      farver_2.1.0      fansi_1.0.3       mvtnorm_1.1-3    
+[13] lubridate_1.8.0   xml2_1.3.3        splines_4.1.3     extrafont_0.18   
+[17] rootSolve_1.8.2.3 jsonlite_1.8.0    nloptr_2.0.0      broom_0.8.0      
+[21] Rttf2pt1_1.3.10   dbplyr_2.1.1      compiler_4.1.3    httr_1.4.2       
+[25] backports_1.4.1   assertthat_0.2.1  fastmap_1.1.0     cli_3.2.0        
+[29] later_1.3.0       htmltools_0.5.2   tools_4.1.3       gtable_0.3.0     
+[33] glue_1.6.2        lmom_2.9          Rcpp_1.0.8.3      carData_3.0-5    
+[37] cellranger_1.1.0  jquerylib_0.1.4   vctrs_0.4.1       nlme_3.1-155     
+[41] extrafontdb_1.0   xfun_0.30         ps_1.6.0          rvest_1.0.2      
+[45] lifecycle_1.0.1   getPass_0.2-2     MASS_7.3-55       scales_1.2.0     
+[49] hms_1.1.1         promises_1.2.0.1  expm_0.999-6      yaml_2.3.5       
+[53] Exact_3.1         gdtools_0.2.4     sass_0.4.1        stringi_1.7.6    
+[57] highr_0.9         e1071_1.7-11      boot_1.3-28       rlang_1.0.2      
+[61] pkgconfig_2.0.3   systemfonts_1.0.4 evaluate_0.15     lattice_0.20-45  
+[65] labeling_0.4.2    processx_3.5.3    tidyselect_1.1.2  plyr_1.8.7       
+[69] magrittr_2.0.3    R6_2.5.1          generics_0.1.2    DBI_1.1.2        
+[73] pillar_1.7.0      haven_2.5.0       whisker_0.4       withr_2.5.0      
+[77] abind_1.4-5       modelr_0.1.8      crayon_1.5.1      car_3.0-12       
+[81] utf8_1.2.2        tzdb_0.3.0        rmarkdown_2.13    readxl_1.4.0     
+[85] data.table_1.14.2 callr_3.7.0       git2r_0.30.1      reprex_2.0.1     
+[89] digest_0.6.29     httpuv_1.6.5      munsell_0.5.0     bslib_0.3.1      </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

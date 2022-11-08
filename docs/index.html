@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Human scheduling of perceptual and behavioural tasks</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">SCHEDULING</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Human scheduling of perceptual and
+behavioural tasks</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-11-09
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>SCHEDULING/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong67e1aac">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 67e1aac
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong67e1aac"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 67e1aac.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/patch_selection.png
+    Ignored:    analysis/patch_selection_8.png
+    Ignored:    analysis/patch_selection_avg.png
+    Ignored:    analysis/site_libs/
+
+Untracked files:
+    Untracked:  analysis/Notes.txt
+    Untracked:  analysis/archive/
+    Untracked:  analysis/fd_pl.rds
+    Untracked:  analysis/fu_pl.rds
+    Untracked:  analysis/prereg/
+    Untracked:  analysis/reward rate analysis.docx
+    Untracked:  analysis/rewardRate.jpg
+    Untracked:  analysis/toAnalyse/
+    Untracked:  analysis/wflow_code_string.txt
+    Untracked:  archive/
+    Untracked:  data/archive/
+    Untracked:  data/create_database.sql
+    Untracked:  data/dataToAnalyse/
+    Untracked:  data/exp6a_typing_exponential.xlsx
+    Untracked:  data/exp6b_typing_linear.xlsx
+    Untracked:  data/rawdata_incEmails/
+    Untracked:  data/sona data/
+    Untracked:  data/summaryFiles/
+    Untracked:  models/
+    Untracked:  old Notes on analysis.txt
+    Untracked:  presentations/
+    Untracked:  references/
+    Untracked:  spatial_pdist.Rdata
+
+Unstaged changes:
+    Modified:   data/README.md
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML
+(<code>docs/index.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+67e1aac
+</td>
+<td>
+knowlabUnimelb
+</td>
+<td>
+2022-11-09
+</td>
+<td>
+Publish data and analysis files
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+606d1db
+</td>
+<td>
+knowlabUnimelb
+</td>
+<td>
+2022-11-07
+</td>
+<td>
+Start workflowr project.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>(REP Title: Prioritizing Dot Discrimination Tasks or Prioritizing
+Typing Tasks)</p>
+<p>Daniel R. Little<sup>1</sup>, Ami Eidels<sup>2</sup>, and Deborah J.
+Lin<sup>1</sup></p>
+<p><sup>1</sup> The University of Melbourne, <sup>2</sup> The University
+of Newcastle</p>
+<div id="scheduling-project" class="section level1">
+<h1>Scheduling Project</h1>
+<p>Preregistration of our hypotheses and data analysis plan are
+available here:</p>
+<ul>
+<li><a href="prereg.html">Preregistration Document v1</a><br />
+</li>
+<li><a href="prereg_v2.html">Preregistration Document v2</a></li>
+<li><a href="prereg_v3.html">Preregistration Document v3</a></li>
+<li><a href="https://osf.io/3kfh6/">OSF</a></li>
+</ul>
+</div>
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>Scheduling theory is concerned with the development of policies which
+determine the “optimal allocation of resources, over time, to a set of
+tasks” (Parker, 1995). Scheduling problems have been studied extensively
+in the context of operations research and computer science, where
+optimal policies have been established for many cases. However, almost
+no research has examined how cognitive and perceptual mechanisms perform
+with respect to these optimal policies.</p>
+<p>For many types of goals, such as minimizing the number of tasks
+completed after a deadline or completing as many tasks as possible in a
+given length of time, an optimal schedule can be determined (Chretienne
+et al., 1995). In the first set of studies, we are focused on the
+scheduling of tasks that vary in difficulty where the goal is to
+complete as many tasks as possible prior to the deadline. In this case,
+it is optimal to complete subtasks in order of shortest to longest
+completion time. In the second set of studies, we additionally vary
+reward, and prompt participants to maximize the total value of the
+subtasks completed in the allotted time. With this goal, the optimal
+strategy is to balance reward against difficulty, creating an index
+based on reward rate and completing the tasks in order of this
+index.</p>
+<p>We conducted a number of experiments in which we controlled the
+difficulty of each subtask by requiring perceptual decisions or
+behavioral actions with known properties. For example, each subtask may
+be a Random Dot Kinematogram (RDK). In an RDK, dots are moving across an
+aperture on the screen in a pseudo-random fashion. The participant must
+to determine whether more dots are moving coherently to the right or to
+the left. Multiple RDK patches will be presented on the selection
+screen. Participants will click on the RDK they want to complete,
+indicate the direction of motion in that patch, and then return to the
+main screen to select the next RDK. The RDK’s will vary in coherence and
+consequently, difficulty and average completion time (Ludwig &amp;
+Evens, 2017). In other experiments, we use a different perceptual
+judgment task or a typing task requiring typing passages of different
+lengths.</p>
+<p>All experiments were completed online. In all experiments, each
+subtask varied in diffculty, either by manipulating the coherence of the
+RDK, by manipulating the ease of the brightness judgement, or by varying
+the length of the typing task. Patches varied from Very Easy to Very
+Hard. In most experiments, text labels were presented on each patch so
+that the difficulty could be discerned without viewing the subtask. In
+other experiments, difficulty had to be judged by previewing the
+task.</p>
+</div>
+<div
+id="experiment-set-1-different-levels-of-difficulty-equal-reward-value"
+class="section level1">
+<h1>Experiment Set 1: Different Levels of Difficulty, Equal Reward
+Value</h1>
+<p>In this set of experiments, we compare how tasks of different
+difficulty but equal reward value are scheduled across a number of
+conditions. In Experiments 1 and 2, we examine tasks which are labelled
+with their corresponding difficulty. In Experiment 3, we test scheduling
+when the difficulty information is conveyed dynamically (i.e.,
+participants can view the tasks before selecting it). Experiment 4
+examines scheduling with eight subtasks, instead of four as in the other
+experiments. Experiment 5 examines a different perceptual judgment task:
+brightness discrimination. Finally, Experiment 6 examines how people
+schedule typing tasks of different length.</p>
+<div id="experiment-1-four-labelled-rdk-subtasks-with-no-error-penalty"
+class="section level2">
+<h2><a href="analysis_exp1_labelled_nodelay.html">Experiment 1</a>:
+<em>Four Labelled RDK Subtasks with No Error Penalty</em></h2>
+<p>In this experiment, there were two conditions, one using fixed
+locations of task difficulty on each trial and one using random
+locations of task difficulty on each trial. In each condition, subjects
+completed several trials selecting and completing RDK tasks when there
+was no deadline for completing all of the subtasks and where there was a
+six second deadline for completing all of the subtasks. There were four
+subtasks varying from Easy to Very Hard, labelled with a text label.
+When an error was made on the RDK task, the direction of the RDK was
+immediately restarted with a potentially new sampled direction.</p>
+</div>
+<div id="experiment-2-four-labelled-rdk-subtasks-with-error-delay"
+class="section level2">
+<h2><a href="analysis_exp2a_labelled_delay.html">Experiment 2</a>:
+<em>Four Labelled RDK Subtasks with Error Delay</em></h2>
+<p>This experiment was identical to Experiment 1, with one exception.
+When an error was made on the RDK direction judgment, a 500 msec delay
+was inserted before resampling the RDK direction and restarting the RDK
+motion. Both fixed and random location conditions were used.</p>
+</div>
+<div id="experiment-2b-four-labelled-rdk-subtasks-with-error-delay"
+class="section level2">
+<h2><a href="analysis_exp2b_avgTimelabelled_delay.html">Experiment
+2b</a>: <em>Four Labelled RDK Subtasks with Error Delay</em></h2>
+<p>This experiment was identical to Experiment 2 but with the labels
+changed from “easy”, “hard”, etc to the average completion time (msec)
+from Experiment 2.</p>
+</div>
+</div>
+<div id="dynamically-varying-tasks" class="section level1">
+<h1>Dynamically varying tasks</h1>
+<p>In contrast to Experiments 1 and 2, in Experiment 3 no difficulty
+labels were provided. Instead, all four RDk’s moved on the selection
+screen at their given coherence level. Once selected, the direction was
+randomly resampled and the unselected tasks either stopped moving or (in
+Experiment 3b) the selected task was highlighted.</p>
+<div id="experiment-3a-four-dynamic-rdks-with-error-delay"
+class="section level2">
+<h2><a href="analysis_exp3a_rdk_dynamic_delay.html">Experiment 3a</a>:
+<em>Four Dynamic RDK’s with Error Delay</em></h2>
+<p>In this experiment, we removed the text labels and allowed each RDK
+to continue moving (at its given coherence) on the selection screen.
+Once an RDK was selected the non-selected RDK’s would stop and the
+direction of the selected RDK was resampled.</p>
+</div>
+<div
+id="experiment-3b-four-dynamic-rdks-with-error-delay-and-highlighting"
+class="section level2">
+<h2><a href="analysis_exp3b_rdk_dynamic_delay_highlight">Experiment
+3b</a>: <em>Four Dynamic RDK’s with Error Delay and
+Highlighting</em></h2>
+<p>This experiment is identical to Experiment 6, but once an RDK was
+selected, it was highlighted by a bounding box, the non-selected RDK’s
+continued moving, and the direction of the selected RDK was
+resampled.</p>
+</div>
+<div
+id="experiment-3c-four-dynamic-rdks-with-error-delay-short-dot-life"
+class="section level2">
+<h2><a
+href="analysis_exp3c_rdk_dynamic_delay_shortdotlife.html">Experiment
+3c</a>: <em>Four Dynamic RDK’s with Error Delay, Short Dot
+Life</em></h2>
+<p>This experiment is identical to Experiment 6 but with the RDK dots
+set to disappear after a short number of frames (rather than at the
+boundary).</p>
+</div>
+</div>
+<div id="increasing-the-number-of-tasks" class="section level1">
+<h1>Increasing the number of tasks</h1>
+<div id="experiment-4-eight-labelled-rdk-subtasks-with-error-delay"
+class="section level2">
+<h2><a href="analysis_exp4_8tasks_labelled_delay.html">Experiment 4</a>:
+<em>Eight Labelled RDK Subtasks with Error Delay</em></h2>
+<p>In this experiment, we increased the number of RDK subtasks to eight.
+In the deadline condition, a 10 second deadline was applied. Only the
+fixed location condition was tested.</p>
+</div>
+</div>
+<div id="alternative-perceptual-judgment" class="section level1">
+<h1>Alternative Perceptual Judgment</h1>
+<div
+id="experiment-5a-four-labelled-pixel-brightness-subtasks-with-error-delay"
+class="section level2">
+<h2><a href="analysis_exp5a_labelled_pixel_delay.html">Experiment
+5a</a>: <em>Four Labelled Pixel Brightness Subtasks with Error
+Delay</em></h2>
+<p>In this experiment, we substituted an pixel brightness judgment for
+each RDK subtask. In the pixel brightness subtask, participants had to
+judge whether the number of black pixels in a 100 x 100 patch were
+greater or less than 50%. We again only tested the fixed location
+condition with a 500 msec delay after an error before the patch was
+resampled.</p>
+</div>
+<div
+id="experiment-5b-four-displayed-pixel-brightness-subtasks-with-error-delay"
+class="section level2">
+<h2><a href="analysis_exp5b_displayed_pixel_delay_uon.html">Experiment
+5b</a>: <em>Four Displayed Pixel Brightness Subtasks with Error
+Delay</em></h2>
+<p>In this experiment, we presented four pixel brightness judgments.
+Participants could see each patch brightness. Once selected, the pixels
+were resampled at the same level. Here we tested both fixed and random
+locations.</p>
+</div>
+</div>
+<div id="typing-tasks" class="section level1">
+<h1>Typing tasks</h1>
+<div
+id="experiment-6a-four-typing-tasks-of-exponentially-varying-length"
+class="section level2">
+<h2><a href="analysis_typing_exp.html">Experiment 6a</a>: <em>Four
+Typing Tasks of exponentially varying length</em></h2>
+<p>In this experiment, participants typed out paragraphs of differing
+length. Length was varied exponentially across paragraphs.</p>
+</div>
+<div id="experiment-6b-four-typing-tasks-of-linearly-varying-length"
+class="section level2">
+<h2><a href="analysis_typing_linear.html">Experiment 6b</a>: <em>Four
+Typing Tasks of linearly varying length</em></h2>
+<p>In this experiment, participants typed out paragraphs of differing
+length. Length was varied linearly across paragraphs.</p>
+</div>
+</div>
+<div
+id="experiment-set-2-different-levels-of-difficulty-different-reward"
+class="section level1">
+<h1>Experiment Set 2: Different Levels of Difficulty, Different
+Reward</h1>
+<p>In Experiment Set 2, we again examine how people schedule tasks that
+vary in difficulty but we add reward as an additional factor. In all
+experiments, the reward varies with difficulty such that more difficult
+tasks incur larger rewards. We instantiated reward in two ways: first,
+we adapted the popular Wordle game to provide participants with clues to
+a missing target word that they attempted to guess after each scheduling
+trial. Completing subtasks rewarded participants with clues of different
+informativeness. Experiment 7 tested random dot motion while Experiment
+8 examined typing word lists of different length. In Experiments 7e and
+8e, each task was allocated a point value and participants accumulated
+points across trials by completing different subtasks.</p>
+<div id="random-dot-motion" class="section level2">
+<h2>Random Dot Motion</h2>
+</div>
+<div
+id="experiment-7a-replication-of-experiment-2-fixed-location-condition"
+class="section level2">
+<h2><a href="analysis_exp7a_rdk_no_reward.html">Experiment 7a</a>:
+<em>Replication of Experiment 2 Fixed Location Condition</em></h2>
+</div>
+<div id="experiment-7b-word-game-reward" class="section level2">
+<h2><a href="analysis_exp7b_rdk_reward.html">Experiment 7b</a>: <em>Word
+Game Reward</em></h2>
+</div>
+<div id="experiment-7c-word-game-reward-instructions"
+class="section level2">
+<h2><a href="analysis_exp7c_rdk_reward_instructions.html">Experiment
+7c</a>: <em>Word Game Reward + Instructions</em></h2>
+</div>
+<div id="experiment-7d-word-game-reward-instructions-letter-keyboard"
+class="section level2">
+<h2><a href="analysis_exp7d_rdk_reward_keyboard.html">Experiment 7d</a>:
+<em>Word Game Reward + Instructions + Letter Keyboard</em></h2>
+</div>
+<div id="experiment-7e-point-reward" class="section level2">
+<h2><a href="analysis_exp7e_rdk_reward_points.html">Experiment 7e</a>:
+<em>Point Reward</em></h2>
+</div>
+<div id="typing-tasks-1" class="section level2">
+<h2>Typing tasks</h2>
+</div>
+<div
+id="experiment-8a-replication-of-experiment-2-fixed-location-condition"
+class="section level2">
+<h2><a href="analysis_exp8a_typing_no_reward.html">Experiment 8a</a>:
+<em>Replication of Experiment 2 Fixed Location Condition</em></h2>
+</div>
+<div id="experiment-8b-word-game-reward" class="section level2">
+<h2><a href="analysis_exp8b_typing_reward.html">Experiment 8b</a>:
+<em>Word Game Reward</em></h2>
+</div>
+<div id="experiment-8c-word-game-reward-instructions"
+class="section level2">
+<h2><a href="analysis_exp8c_typing_reward_instructions.html">Experiment
+8c</a>: <em>Word Game Reward + Instructions</em></h2>
+</div>
+<div id="experiment-8d-word-game-reward-instructions-letter-keyboard"
+class="section level2">
+<h2><a href="analysis_exp8d_typing_reward_keyboard.html">Experiment
+8d</a>: <em>Word Game Reward + Instructions + Letter Keyboard</em></h2>
+</div>
+<div id="experiment-8e-point-reward" class="section level2">
+<h2><a href="analysis_exp8e_typing_reward_points.html">Experiment
+8e</a>: <em>Point Reward</em></h2>
+<!-- Make changes to files: -->
+<!-- wflow_publish(c('analysis/index.Rmd', 'analysis/analysis_exp1_labelled_nodelay.Rmd', 'data/exp1_fixed_rdk_data.csv'), message="update analysis files", republish = TRUE) -->
+<!-- Note that if any of the files fail, then you need to run the whole thing again -->
+<!-- wflow_git_push() won't work because of the authentication so use the terminal
+git push -u origin master -->
+<!-- Note: once this is done, I had to update index.Rmd separately)-->
+<!--wflow_publish(c('analysis/index.Rmd'), message="update main file")-->
+<!-- ## Experiments to analyses -->
+<!-- Select tasks in order:210921_random_moving_selectiononly_data.csv  -->
+<!-- Typing Random order -->
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
