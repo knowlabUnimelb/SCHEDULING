@@ -15,7 +15,7 @@
 
 <title>Experiment 2b: RDK Direction Judgement, Average Completion Time Label, 4 Tasks, 500 msec Error Penalty</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -31,12 +31,14 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -156,11 +158,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -189,8 +195,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -198,16 +204,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -344,7 +343,13 @@ div.tocify {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/knowlabUnimelb/SCHEDULING">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -386,7 +391,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-11-09
+<strong>Last updated:</strong> 2025-07-29
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -404,7 +409,7 @@ title="This is the local directory in which the code in this file was executed."
 This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
 analysis was created with <a
   href="https://github.com/workflowr/workflowr">workflowr</a> (version
-1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
 that were applied when the results were created. The <em>Past
 versions</em> tab lists the development history.
 </p>
@@ -517,13 +522,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong67e1aac">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomknowlabUnimelbSCHEDULINGtree2c1fd06c7c42fc5ca1272d58fe8aa7e7748d5256targetblank2c1fd06a">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 67e1aac
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/knowlabUnimelb/SCHEDULING/tree/2c1fd06c7c42fc5ca1272d58fe8aa7e7748d5256" target="_blank">2c1fd06</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong67e1aac"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomknowlabUnimelbSCHEDULINGtree2c1fd06c7c42fc5ca1272d58fe8aa7e7748d5256targetblank2c1fd06a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -532,7 +539,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 67e1aac.
+The results in this page were generated with repository version
+<a href="https://github.com/knowlabUnimelb/SCHEDULING/tree/2c1fd06c7c42fc5ca1272d58fe8aa7e7748d5256" target="_blank">2c1fd06</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -547,6 +555,7 @@ were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/patch_selection.png
     Ignored:    analysis/patch_selection_8.png
@@ -555,31 +564,124 @@ Ignored files:
 
 Untracked files:
     Untracked:  analysis/Notes.txt
+    Untracked:  analysis/additional_scripts.R
+    Untracked:  analysis/analysis_2025_deadlines.Rmd
+    Untracked:  analysis/analysis_2025_dynamicNoise_fixed.Rmd
+    Untracked:  analysis/analysis_exp10_preemption.Rmd
+    Untracked:  analysis/analysis_exp10_preemption1and2.Rmd
+    Untracked:  analysis/analysis_exp10b_preemption-pareto.Rmd
+    Untracked:  analysis/analysis_exp11_facesInNoise.Rmd
+    Untracked:  analysis/analysis_exp11_facesInNoise_EW.Rmd
+    Untracked:  analysis/analysis_exp11_facesInNoise_EW_v2.Rmd
+    Untracked:  analysis/analysis_exp12_variability.Rmd
+    Untracked:  analysis/analysis_exp12_variability_cynthia.Rmd
+    Untracked:  analysis/analysis_exp12_variability_cynthia_update.Rmd
+    Untracked:  analysis/analysis_exp13_preemption.Rmd
+    Untracked:  analysis/analysis_exp14_ASD_individual_differences.Rmd
+    Untracked:  analysis/analysis_exp9_preselection.Rmd
+    Untracked:  analysis/analysis_exp9_preselection1and2.Rmd
+    Untracked:  analysis/analysis_exp9_select-then-complete.Rmd
+    Untracked:  analysis/anovaData/
     Untracked:  analysis/archive/
+    Untracked:  analysis/correlation_test.m
     Untracked:  analysis/fd_pl.rds
     Untracked:  analysis/fu_pl.rds
+    Untracked:  analysis/instructions_for_honours_students.txt
+    Untracked:  analysis/joyPlot.m
+    Untracked:  analysis/joyPlot.zip
+    Untracked:  analysis/joyPlot/
+    Untracked:  analysis/loadData.m
+    Untracked:  analysis/mstrfind.m
+    Untracked:  analysis/plotDistanceByTrials.m
     Untracked:  analysis/prereg/
     Untracked:  analysis/reward rate analysis.docx
     Untracked:  analysis/rewardRate.jpg
+    Untracked:  analysis/scheduling_analysis_functions.R
+    Untracked:  analysis/temp/
     Untracked:  analysis/toAnalyse/
     Untracked:  analysis/wflow_code_string.txt
-    Untracked:  archive/
+    Untracked:  code/AUTSIMQ/
+    Untracked:  code/DYNAMICNOISE/
+    Untracked:  code/FACESINNOISE/
+    Untracked:  code/Notes on how the scheduling jsPsych code works.txt
+    Untracked:  code/PREEMPT/
+    Untracked:  code/PREPLAN/
+    Untracked:  code/SCHEDULEPIX/
+    Untracked:  code/SCHEDULEPIX_UON/
+    Untracked:  code/SCHEDULERDK/
+    Untracked:  code/SCHEDULERDK_UON/
+    Untracked:  code/SCHEDULE_REWARD/
+    Untracked:  code/SCHEDULE_TYPING/
+    Untracked:  code/SMALL_N_LETTERNOISE/
+    Untracked:  code/TRAIN_PREEMPT/
+    Untracked:  code/TRAIN_VARYING_DEADLINES/
+    Untracked:  code/autism_quotient.txt
+    Untracked:  data/2020_exp1_rdk_data.csv
+    Untracked:  data/2020_exp2_rdk_data.csv
+    Untracked:  data/2021_exp2b_rdk_data_avgtime.csv
+    Untracked:  data/2023-exp10-preemption-pareto.csv
+    Untracked:  data/2023-exp10-preemption-selections.csv
+    Untracked:  data/2023-exp10-preemption.csv
+    Untracked:  data/2023-exp11-facesInNoise-unlabelledCondition.csv
+    Untracked:  data/2023-exp11-facesInNoise.csv
+    Untracked:  data/2023-exp9-preplan.csv
+    Untracked:  data/2023-exp9-select-then-complete.csv
+    Untracked:  data/2023_AQdata.csv
+    Untracked:  data/2024-exp12-variability.csv
+    Untracked:  data/2024-exp12-variability_v2.csv
+    Untracked:  data/2024-exp12-variability_v3.csv
+    Untracked:  data/2024-exp13-preemption.csv
+    Untracked:  data/2024-exp13-preemption_v2.csv
+    Untracked:  data/2024-scheduling-data.csv
+    Untracked:  data/2024_data_rdk_select_first_AQcorrelation_update.csv
+    Untracked:  data/2024_data_typing_train_variability.csv
+    Untracked:  data/2025_data_dynamic_noise_fixed_locations.csv
+    Untracked:  data/2025_data_typing_train_deadlines_exp1rates.csv
+    Untracked:  data/2025_data_typing_train_variability_fulldataset.csv
+    Untracked:  data/ASRSscoring.csv
+    Untracked:  data/OLIFEscoring.csv
+    Untracked:  data/OLIFEscoring_v0.csv
+    Untracked:  data/POLYscoring.csv
+    Untracked:  data/SQL query.txt
     Untracked:  data/archive/
     Untracked:  data/create_database.sql
     Untracked:  data/dataToAnalyse/
+    Untracked:  data/data_dictionary_deadlines.csv
+    Untracked:  data/data_dictionary_dynamic_noise.csv
+    Untracked:  data/data_dictionary_facesInNoise.csv
+    Untracked:  data/data_dictionary_preemption.csv
+    Untracked:  data/data_dictionary_preplan.csv
+    Untracked:  data/data_dictionary_select_then_complete.csv
+    Untracked:  data/data_dictionary_variability.csv
+    Untracked:  data/exp3a_rdk_data_dynamic_selections.csv
+    Untracked:  data/exp3b_rdk_data_dynamic_highlight_selections.csv
     Untracked:  data/exp6a_typing_exponential.xlsx
     Untracked:  data/exp6b_typing_linear.xlsx
+    Untracked:  data/exp8a_typing_no_reward_data_selections.csv
     Untracked:  data/rawdata_incEmails/
+    Untracked:  data/selections/
     Untracked:  data/sona data/
     Untracked:  data/summaryFiles/
-    Untracked:  models/
-    Untracked:  old Notes on analysis.txt
-    Untracked:  presentations/
-    Untracked:  references/
+    Untracked:  data/temp_AQcorrelationReplication/
     Untracked:  spatial_pdist.Rdata
 
 Unstaged changes:
+    Modified:   analysis/analysis_exp1_labelled_nodelay.Rmd
+    Modified:   analysis/analysis_exp3a_rdk_dynamic_delay.Rmd
+    Modified:   analysis/analysis_exp3b_rdk_dynamic_delay_highlight.Rmd
+    Modified:   analysis/analysis_exp7e_rdk_reward_points.Rmd
+    Modified:   analysis/analysis_exp8a_typing_no_reward.Rmd
+    Deleted:    analysis/prereg.Rmd
+    Deleted:    analysis/prereg_v2.Rmd
+    Deleted:    analysis/prereg_v3.Rmd
+    Deleted:    analysis/prereg_v6_AQcorrelation.Rmd
     Modified:   data/README.md
+    Modified:   data/data_dictionary.csv
+    Modified:   data/data_dictionary_avgTime.csv
+    Modified:   data/data_dictionary_ruby.csv
+    Deleted:    data/exp1_rdk_data.csv
+    Deleted:    data/exp2_rdk_data.csv
+    Deleted:    data/exp2b_rdk_data_avgtime.csv
 
 </code></pre>
 <p>
@@ -631,7 +733,42 @@ Message
 Rmd
 </td>
 <td>
-67e1aac
+<a href="https://github.com/knowlabUnimelb/SCHEDULING/blob/2c1fd06c7c42fc5ca1272d58fe8aa7e7748d5256/analysis/analysis_exp2b_avgTimelabelled_delay.Rmd" target="_blank">2c1fd06</a>
+</td>
+<td>
+knowlabUnimelb
+</td>
+<td>
+2025-07-29
+</td>
+<td>
+Fix markdown in 2a and update analysis code to use shared file repo in
+2b
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/knowlabUnimelb/SCHEDULING/2e6ecdf55009e8a93accd3c86bea5051c5989872/docs/analysis_exp2b_avgTimelabelled_delay.html" target="_blank">2e6ecdf</a>
+</td>
+<td>
+knowlabUnimelb
+</td>
+<td>
+2022-11-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/knowlabUnimelb/SCHEDULING/blob/67e1aac2f4c570d603aa6f57b9ffc8299a941ce0/analysis/analysis_exp2b_avgTimelabelled_delay.Rmd" target="_blank">67e1aac</a>
 </td>
 <td>
 knowlabUnimelb
@@ -658,20 +795,17 @@ of Newcastle</p>
 <h1>Method</h1>
 <div id="participants" class="section level2">
 <h2>Participants</h2>
-<p>We tested 99 participants (77 F, 16 M, 6 Undeclared). Participants
+<p>We tested 100 participants (80 F, 17 M, 3 Undeclared). Participants
 were recruited through the Melbourne School of Psychological Sciences
-Research Experience Pool (Mean age = 20.34, range = 17 - 60).
-Participants were reimbursed with credit toward completion of a first
-year psychology subject. Datasets from 1 subjects were excluded for
-completing the experiment twice; i.e., only the first of the datasets
-for these subjects was retained.</p>
-<p>Forty-five were assigned to the <em>Fixed Difficulty</em> condition.
-In this condition, the location of easy, medium, hard, and very hard
-random dot kinematograms (RDK’s) was held constant across trials.</p>
-<p>Fifty-four were assigned to the <em>Random Difficulty</em> condition.
-In this condition, the location of easy, medium, hard, and very hard
-random dot kinematograms (RDK’s) were randomized from trial to
-trial.</p>
+Research Experience Pool (Mean age = 20.3298969, range = 17 - 60).
+Participants were reimbursed with credit toward completion of a
+first-year psychology subject.</p>
+<p>were assigned to the <em>Fixed Difficulty</em> condition. In this
+condition, the location of easy, medium, hard, and very hard random dot
+kinematograms (RDK’s) was held constant across trials.</p>
+<p>were assigned to the <em>Random Difficulty</em> condition. In this
+condition, the location of easy, medium, hard, and very hard random dot
+kinematograms (RDK’s) were randomized from trial to trial.</p>
 <p>The Fixed Difficulty experiment was completed before the Random
 Difficulty experiment. Participants only completed one of these.</p>
 </div>
@@ -688,6 +822,43 @@ RDK was restarted at the same coherence but with a resampled direction
 to the RDK again. A new task could not be selected until the RDK was
 completed successfully.</p>
 <p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/taskImage-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-taskImage-1">
+Past versions of taskImage-1.png
+</button>
+</p>
+<div id="fig-taskImage-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/knowlabUnimelb/SCHEDULING/blob/2e6ecdf55009e8a93accd3c86bea5051c5989872/docs/figure/analysis_exp2b_avgTimelabelled_delay.Rmd/taskImage-1.png" target="_blank">2e6ecdf</a>
+</td>
+<td>
+knowlabUnimelb
+</td>
+<td>
+2022-11-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Participants first completed 10 trials with a long (30 sec) deadline
 to help participants learn the task, explore strategies, and allow for
 comparison to a short-deadline condition. We term this the <em>no
@@ -700,10 +871,10 @@ uniquely generated id code. Subjects were able to use the link multiple
 times; further, subjects were able to exit the experiment at any time.
 Consequently, the datafile contains partially completed data for some
 subjects which needed to be identified and removed.</p>
-<p>A handful of subjects (N = 8) had less than chance accuracy on the
-easiest RDK indicating equipment problems or a misunderstanding of task
-directions. We removed these participants from further anlaysis leaving
-41 and 50 in the fixed and random location conditions, respectively.</p>
+<p>After removing any participants who had less than chance accuracy on
+the easiest RDK indicating equipment problems or a misunderstanding of
+task directions, there were 41 and 51 in the fixed and random location
+conditions, respectively.</p>
 </div>
 </div>
 <div id="data-analysis" class="section level1">
@@ -715,51 +886,8 @@ questions:</p>
 <ul>
 <li>How many tasks are completed on average?</li>
 </ul>
-<p>Across both conditions, participants completed 3.9 tasks during the
-phase and NaN tasks during the phase.</p>
-<table>
-<caption>Average number of correctly completed tasks in each
-condition</caption>
-<thead>
-<tr class="header">
-<th align="left">condition</th>
-<th align="left">phase</th>
-<th align="right">mean</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">fixed</td>
-<td align="left">untimed</td>
-<td align="right">3.907268</td>
-</tr>
-<tr class="even">
-<td align="left">fixed</td>
-<td align="left">deadline</td>
-<td align="right">3.479373</td>
-</tr>
-<tr class="odd">
-<td align="left">random</td>
-<td align="left">untimed</td>
-<td align="right">3.901409</td>
-</tr>
-<tr class="even">
-<td align="left">random</td>
-<td align="left">deadline</td>
-<td align="right">3.400402</td>
-</tr>
-</tbody>
-</table>
-<p>As one might expect, there were fewer tasks completed under a
-deadline than without a deadline (<span
-class="math inline">\(\beta_{deadline}\)</span> = 0.45, SE = 0.08).<a
-href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> There was
-no difference between conditions, (<span
-class="math inline">\(\beta_{condition}\)</span> = 0.01, SE = 0.04), and
-no interaction between deadline and location condition (<span
-class="math inline">\(\beta_{condition \times deadline}\)</span>= 0.05,
-SE = 0.11). <a href="#fn2" class="footnote-ref"
-id="fnref2"><sup>2</sup></a></p>
+<p>Across both conditions, participants completed 3.91 tasks during the
+untimed phase and 3.44 tasks during the deadline phase.</p>
 </div>
 <div id="rdk-performance" class="section level2">
 <h2>RDK performance</h2>
@@ -773,295 +901,206 @@ medium, hard, and very hard tasks?</li>
 became easier. As expected, the RTs were shorter under a deadline than
 without a deadline. We visualised the response times in two ways: First,
 we simply took the average of each attempt on each RDK.</p>
-<!-- after first removing 335 trials which had RTs greater than 3000 msec.  -->
 <p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/difficulty_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-difficulty_plot-1">
+Past versions of difficulty_plot-1.png
+</button>
+</p>
+<div id="fig-difficulty_plot-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/knowlabUnimelb/SCHEDULING/blob/2e6ecdf55009e8a93accd3c86bea5051c5989872/docs/figure/analysis_exp2b_avgTimelabelled_delay.Rmd/difficulty_plot-1.png" target="_blank">2e6ecdf</a>
+</td>
+<td>
+knowlabUnimelb
+</td>
+<td>
+2022-11-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/difficulty_plot-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/difficulty_plot-3.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Second, we computed the time to complete an RDK as the cumulative sum
 across multiple attempts within a trial (termed Cumulative RT or cRT).
 That is, if an error is made and the RDK needs to be repeated, then the
 total RT is the sum of both attempts.</p>
-<p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/difficulty_sum_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>We further broke down RTs by condition, deadline, and difficulty.</p>
-<table>
-<caption>Mean accuracy, RT, and RT summed across attempts for each
-difficulty and each phase</caption>
+</div>
+<div id="reward-rate" class="section level2">
+<h2>Reward Rate</h2>
+<p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/rewardRate_analysis-1.png" width="672" style="display: block; margin: auto;" /></p>
+<table style="width:100%;">
 <colgroup>
-<col width="11%" />
-<col width="10%" />
-<col width="12%" />
-<col width="5%" />
-<col width="14%" />
-<col width="12%" />
-<col width="8%" />
-<col width="6%" />
-<col width="10%" />
+<col width="33%" />
+<col width="21%" />
 <col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="6%" />
+<col width="6%" />
+<col width="11%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left">condition</th>
-<th align="left">phase</th>
-<th align="left">difficulty</th>
-<th align="right">n</th>
-<th align="right">Mean.Correct</th>
-<th align="right">SE.Correct</th>
-<th align="right">Mean.RT</th>
-<th align="right">SE.RT</th>
-<th align="right">Mean.crt</th>
-<th align="right">SE.crt</th>
+<th align="left"></th>
+<th align="left">name[none]</th>
+<th align="right">ss[none]</th>
+<th align="right">df[none]</th>
+<th align="right">ms[none]</th>
+<th align="right">F[none]</th>
+<th align="right">p[none]</th>
+<th align="right">partEta[none]</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">fixed</td>
-<td align="left">untimed</td>
-<td align="left">easy</td>
-<td align="right">684</td>
-<td align="right">0.85</td>
-<td align="right">0.01</td>
-<td align="right">819.52</td>
-<td align="right">21.99</td>
-<td align="right">958.92</td>
-<td align="right">30.77</td>
+<td align="left">“Phase”</td>
+<td align="left">Phase</td>
+<td align="right">58.230</td>
+<td align="right">1</td>
+<td align="right">58.230</td>
+<td align="right">145.934</td>
+<td align="right">0.000</td>
+<td align="right">0.621</td>
 </tr>
 <tr class="even">
-<td align="left">fixed</td>
-<td align="left">untimed</td>
-<td align="left">medium</td>
-<td align="right">534</td>
-<td align="right">0.80</td>
-<td align="right">0.02</td>
-<td align="right">934.25</td>
-<td align="right">45.67</td>
-<td align="right">1166.03</td>
-<td align="right">62.99</td>
+<td align="left">[“Phase”,“condition”]</td>
+<td align="left">Phase:condition</td>
+<td align="right">4.039</td>
+<td align="right">1</td>
+<td align="right">4.039</td>
+<td align="right">10.123</td>
+<td align="right">0.002</td>
+<td align="right">0.102</td>
 </tr>
 <tr class="odd">
-<td align="left">fixed</td>
-<td align="left">untimed</td>
-<td align="left">hard</td>
-<td align="right">488</td>
-<td align="right">0.73</td>
-<td align="right">0.02</td>
-<td align="right">1184.97</td>
-<td align="right">49.88</td>
-<td align="right">1610.12</td>
-<td align="right">89.10</td>
+<td align="left">[“Phase”,“condition”,“.RES”]</td>
+<td align="left">Residual</td>
+<td align="right">35.513</td>
+<td align="right">89</td>
+<td align="right">0.399</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 </tr>
 <tr class="even">
-<td align="left">fixed</td>
-<td align="left">untimed</td>
-<td align="left">v. hard</td>
-<td align="right">454</td>
-<td align="right">0.57</td>
-<td align="right">0.02</td>
-<td align="right">1394.37</td>
-<td align="right">60.44</td>
-<td align="right">2426.84</td>
-<td align="right">122.99</td>
+<td align="left">“Difficulty”</td>
+<td align="left">Difficulty</td>
+<td align="right">78.465</td>
+<td align="right">3</td>
+<td align="right">26.155</td>
+<td align="right">232.544</td>
+<td align="right">0.000</td>
+<td align="right">0.723</td>
 </tr>
 <tr class="odd">
-<td align="left">fixed</td>
-<td align="left">deadline</td>
-<td align="left">easy</td>
-<td align="right">1513</td>
-<td align="right">0.89</td>
-<td align="right">0.01</td>
-<td align="right">469.89</td>
-<td align="right">5.46</td>
-<td align="right">524.64</td>
-<td align="right">7.02</td>
+<td align="left">[“Difficulty”,“condition”]</td>
+<td align="left">Difficulty:condition</td>
+<td align="right">0.933</td>
+<td align="right">3</td>
+<td align="right">0.311</td>
+<td align="right">2.766</td>
+<td align="right">0.042</td>
+<td align="right">0.030</td>
 </tr>
 <tr class="even">
-<td align="left">fixed</td>
-<td align="left">deadline</td>
-<td align="left">medium</td>
-<td align="right">1405</td>
-<td align="right">0.84</td>
-<td align="right">0.01</td>
-<td align="right">475.09</td>
-<td align="right">5.91</td>
-<td align="right">557.66</td>
-<td align="right">9.13</td>
+<td align="left">[“Difficulty”,“condition”,“.RES”]</td>
+<td align="left">Residual</td>
+<td align="right">30.030</td>
+<td align="right">267</td>
+<td align="right">0.112</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 </tr>
 <tr class="odd">
-<td align="left">fixed</td>
-<td align="left">deadline</td>
-<td align="left">hard</td>
-<td align="right">1317</td>
-<td align="right">0.74</td>
-<td align="right">0.01</td>
-<td align="right">543.78</td>
-<td align="right">8.22</td>
-<td align="right">710.70</td>
-<td align="right">15.75</td>
+<td align="left">[“Phase”,“Difficulty”]</td>
+<td align="left">Phase:Difficulty</td>
+<td align="right">1.045</td>
+<td align="right">3</td>
+<td align="right">0.348</td>
+<td align="right">4.883</td>
+<td align="right">0.003</td>
+<td align="right">0.052</td>
 </tr>
 <tr class="even">
-<td align="left">fixed</td>
-<td align="left">deadline</td>
-<td align="left">v. hard</td>
-<td align="right">1236</td>
-<td align="right">0.64</td>
-<td align="right">0.01</td>
-<td align="right">554.76</td>
-<td align="right">9.50</td>
-<td align="right">806.29</td>
-<td align="right">18.38</td>
+<td align="left">[“Phase”,“Difficulty”,“condition”]</td>
+<td align="left">Phase:Difficulty:condition</td>
+<td align="right">0.208</td>
+<td align="right">3</td>
+<td align="right">0.069</td>
+<td align="right">0.973</td>
+<td align="right">0.406</td>
+<td align="right">0.011</td>
 </tr>
 <tr class="odd">
-<td align="left">random</td>
-<td align="left">untimed</td>
-<td align="left">easy</td>
-<td align="right">817</td>
-<td align="right">0.92</td>
-<td align="right">0.01</td>
-<td align="right">902.07</td>
-<td align="right">27.21</td>
-<td align="right">976.63</td>
-<td align="right">33.83</td>
-</tr>
-<tr class="even">
-<td align="left">random</td>
-<td align="left">untimed</td>
-<td align="left">medium</td>
-<td align="right">686</td>
-<td align="right">0.84</td>
-<td align="right">0.01</td>
-<td align="right">1028.27</td>
-<td align="right">48.43</td>
-<td align="right">1228.45</td>
-<td align="right">68.79</td>
-</tr>
-<tr class="odd">
-<td align="left">random</td>
-<td align="left">untimed</td>
-<td align="left">hard</td>
-<td align="right">583</td>
-<td align="right">0.71</td>
-<td align="right">0.02</td>
-<td align="right">1150.49</td>
-<td align="right">46.93</td>
-<td align="right">1613.99</td>
-<td align="right">70.70</td>
-</tr>
-<tr class="even">
-<td align="left">random</td>
-<td align="left">untimed</td>
-<td align="left">v. hard</td>
-<td align="right">524</td>
-<td align="right">0.59</td>
-<td align="right">0.02</td>
-<td align="right">1469.59</td>
-<td align="right">70.31</td>
-<td align="right">2460.35</td>
-<td align="right">117.53</td>
-</tr>
-<tr class="odd">
-<td align="left">random</td>
-<td align="left">deadline</td>
-<td align="left">easy</td>
-<td align="right">2218</td>
-<td align="right">0.89</td>
-<td align="right">0.01</td>
-<td align="right">499.35</td>
-<td align="right">3.81</td>
-<td align="right">556.96</td>
-<td align="right">5.01</td>
-</tr>
-<tr class="even">
-<td align="left">random</td>
-<td align="left">deadline</td>
-<td align="left">medium</td>
-<td align="right">1738</td>
-<td align="right">0.84</td>
-<td align="right">0.01</td>
-<td align="right">531.61</td>
-<td align="right">4.66</td>
-<td align="right">623.31</td>
-<td align="right">7.60</td>
-</tr>
-<tr class="odd">
-<td align="left">random</td>
-<td align="left">deadline</td>
-<td align="left">hard</td>
-<td align="right">1543</td>
-<td align="right">0.72</td>
-<td align="right">0.01</td>
-<td align="right">585.50</td>
-<td align="right">6.72</td>
-<td align="right">782.17</td>
-<td align="right">12.25</td>
-</tr>
-<tr class="even">
-<td align="left">random</td>
-<td align="left">deadline</td>
-<td align="left">v. hard</td>
-<td align="right">1460</td>
-<td align="right">0.56</td>
-<td align="right">0.01</td>
-<td align="right">640.26</td>
-<td align="right">9.13</td>
-<td align="right">1056.63</td>
-<td align="right">20.64</td>
+<td align="left">[“Phase”,“Difficulty”,“condition”,“.RES”]</td>
+<td align="left">Residual</td>
+<td align="right">19.041</td>
+<td align="right">267</td>
+<td align="right">0.071</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 </tr>
 </tbody>
 </table>
-<p>Statistical analysis, using a 2 condition <span
-class="math inline">\(\times\)</span> 2 phase <span
-class="math inline">\(\times\)</span> 4 difficulty between-within ANOVA,
-of the effect of these factors on accuracy confirmed the effect of
-difficulty, F(3, 264) = 199.93, p = 0, <span
-class="math inline">\(\eta^2\)</span> = 0.39. RDK responses in the fixed
-condition were more accurate than RDK responses in the random condition,
-F(1, 88) = 0.01, p = 0.94, <span class="math inline">\(\eta^2\)</span> =
-0. RDK responses were not more accurate under a deadline then under no
-deadline, F(1, 88) = 0.15, p = 0.7, <span
-class="math inline">\(\eta^2\)</span> = 0. However, there was a
-significant phase <span class="math inline">\(\times\)</span> difficulty
-interaction, F(3, 264) = 0.68, p = 0.56, <span
-class="math inline">\(\eta^2\)</span> = 0 reflecting a greater increase
-from easy to very hard when there was no deadline compared to when there
-was a deadline.</p>
-<p>We used the same analysis to examine the effect of condition, phase,
-and difficulty on RT. We confirmed that RTs were shorter under a
-deadline, F(1, 88) = 228.39, p = 0, <span
-class="math inline">\(\eta^2\)</span> = 0.36, and that RTs became
-shorter as the RDK’s became easier, F(3, 264) = 55.16, p = 0, <span
-class="math inline">\(\eta^2\)</span> = 0.11. There was again an
-interaction between phase and difficulty, F(3, 264) = 33.94, p = 0,
-<span class="math inline">\(\eta^2\)</span> = 0.05 indicating that RT
-decreased more with increasing dot coherence when there was no deadline
-compared to when there was a deadline. These results accord with the
-vast literature on RDK performance (see e.g., Ludwig &amp; Evens,
-2017).</p>
-<p>Finally, we repeated the analysis using the cRT examining the effect
-of condition, phase, and difficulty. We confirmed that cRTs were shorter
-under a deadline, F(1, 88) = 217.86, p = 0, <span
-class="math inline">\(\eta^2\)</span> = 0.34, and that RTs became
-shorter as the RDK’s became easier, F(3, 264) = 118.04, p = 0, <span
-class="math inline">\(\eta^2\)</span> = 0.26. There was again an
-interaction between phase and difficulty, F(3, 264) = 49.7, p = 0, <span
-class="math inline">\(\eta^2\)</span> = 0.11 indicating that RT
-decreased more with increasing dot coherence when there was no deadline
-compared to when there was a deadline.</p>
-</div>
-<div id="reward-rate" class="section level2">
-<h2>Reward Rate</h2>
-<p>To confirm that coherence offered a good proxy for difficulty (and
-hence, that an optimal order of easiest to hardest was maintained), we
-calculated the reward rate for each patch. Reward rate can be defined as
-“the proportion of correct trials divided by the average duration
-between decisions” (Gold &amp; Shadlen, 2002), and is tantamount, in our
-task, to percentage of correct responses per unit time (Bogacz et al,
-2006). For our purposes, we can fix time at 1 sec calculate the Reward
-Rate as the number of RDK tasks completed in 1 sec.</p>
-<p>Inspection of the figure reveals that RR is roughly monotonically
-increasing when tasks become easier. Under such conditions, the optimal
-order of task-completion should be easy-to-hardest. This could change in
-a predictable manner if people value differently easy and hard tasks
-(overweight completion of harder tasks). The only notable exception was
-in the fixed, no deadline task, where the easy and medium RDK conditions
-had equal RR.</p>
-<p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/rewardRate_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">name</th>
+<th align="right">ss</th>
+<th align="right">df</th>
+<th align="right">ms</th>
+<th align="right">F</th>
+<th align="right">p</th>
+<th align="right">partEta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">“condition”</td>
+<td align="left">condition</td>
+<td align="right">2.974</td>
+<td align="right">1</td>
+<td align="right">2.974</td>
+<td align="right">4.761</td>
+<td align="right">0.032</td>
+<td align="right">0.051</td>
+</tr>
+<tr class="even">
+<td align="left">“Residual”</td>
+<td align="left">Residual</td>
+<td align="right">55.591</td>
+<td align="right">89</td>
+<td align="right">0.625</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="optimality-in-each-condition" class="section level2">
 <h2>Optimality in each condition</h2>
@@ -1079,8 +1118,8 @@ task in each rank position. These matrices indicate the proportions of
 responses for each difficulty level which were chosen first, second,
 third, or fourth, respectively. The matrix from a dataset in which
 choice is always optimal would have ones on the diagonal and zeros on
-the off-diagona.</p>
-<p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/heatmap_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+the off-diagonal.</p>
+<p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/heatmap_plot_over_subs-1.png" width="672" style="display: block; margin: auto;" /></p>
 <ul>
 <li>Do the marginal distributions differ from uniformity?</li>
 </ul>
@@ -1090,116 +1129,143 @@ distributed according to a <span class="math inline">\(\chi^2\)</span>
 distribution with the following test-statistic: <span
 class="math display">\[\chi^2 = \frac{12N}{k(k+1)}\sum_{j=1}^k \left(m_j
 - \frac{k+1}{2} \right)^2\]</span> see (Marden, 1995).</p>
+<pre><code>                  condition    phase  chi2 df    p</code></pre>
+<p>1 fixed_location_delay_avgtime untimed 0.60 3 0.23 2
+fixed_location_delay_avgtime deadline 20.18 3 0.00 3
+random_location_delay_avgtime untimed 5.19 3 0.07 4
+random_location_delay_avgtime deadline 27.49 3 0.00 It is evident at a
+glance that the ordering of choices is more optimal when the locations
+are fixed; that is, the proportions on the diagonal are higher. When the
+locations are fixed, choice order becomes more optimal under a deadline.
+By contrast, when locations are random, responding becomes <em>less</em>
+optimal under a deadline. This likely reflects the additional costs of
+having to search for the appropriate task to complete. This search is
+minimised in the fixed location condition.</p>
+<ul>
+<li>How optimal were responses?</li>
+</ul>
+<p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/distanceAnalysis-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="stability-of-selections" class="section level2">
+<h2>Stability of selections</h2>
+<p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/entropyAnalysis-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/entropyBlockAnalysis-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="selection-choice-rts" class="section level2">
+<h2>Selection Choice RTs</h2>
 <table>
-<caption>Chi2 test of uniformity</caption>
+<caption>Mean RTs for each scheduling selection</caption>
+<colgroup>
+<col width="40%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">condition</th>
 <th align="left">phase</th>
-<th align="right">chi2</th>
-<th align="right">df</th>
-<th align="right">p</th>
+<th align="right">mrt_sel1</th>
+<th align="right">mrt_sel2</th>
+<th align="right">mrt_sel3</th>
+<th align="right">mrt_sel4</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">fixed</td>
-<td align="left">untimed</td>
-<td align="right">4.30</td>
-<td align="right">3</td>
-<td align="right">0.10</td>
+<td align="left">fixed_location_delay_avgtime</td>
+<td align="left">deadline</td>
+<td align="right">663.65</td>
+<td align="right">659.36</td>
+<td align="right">641.29</td>
+<td align="right">590.01</td>
 </tr>
 <tr class="even">
-<td align="left">fixed</td>
-<td align="left">deadline</td>
-<td align="right">367.08</td>
-<td align="right">3</td>
-<td align="right">0.00</td>
+<td align="left">fixed_location_delay_avgtime</td>
+<td align="left">untimed</td>
+<td align="right">1577.96</td>
+<td align="right">1290.18</td>
+<td align="right">1073.76</td>
+<td align="right">1031.92</td>
 </tr>
 <tr class="odd">
-<td align="left">random</td>
-<td align="left">untimed</td>
-<td align="right">1.29</td>
-<td align="right">3</td>
-<td align="right">0.24</td>
+<td align="left">random_location_delay_avgtime</td>
+<td align="left">deadline</td>
+<td align="right">680.02</td>
+<td align="right">669.88</td>
+<td align="right">649.91</td>
+<td align="right">596.18</td>
 </tr>
 <tr class="even">
-<td align="left">random</td>
-<td align="left">deadline</td>
-<td align="right">94.25</td>
-<td align="right">3</td>
-<td align="right">0.00</td>
+<td align="left">random_location_delay_avgtime</td>
+<td align="left">untimed</td>
+<td align="right">1668.45</td>
+<td align="right">1248.87</td>
+<td align="right">998.97</td>
+<td align="right">962.96</td>
 </tr>
 </tbody>
 </table>
-<p>It is evident at a glance that the ordering of choices is more
-optimal when the locations are fixed; that is, the proportions on the
-diagonal are higher. When the locations are fixed, choice order becomes
-more optimal under a deadline. By contrast, when locations are random,
-responding becomes <em>less</em> optimal under a deadline. This likely
-reflects the additional costs of having to search for the appropriate
-task to complete. This search is minimised in the fixed location
-condition.</p>
-<p>We compared the location conditions and phases using chi-2
-analysis.</p>
-<table>
-<caption>Pearson’s chi-squared test</caption>
-<thead>
-<tr class="header">
-<th align="left">Comparison</th>
-<th align="right">chi2</th>
-<th align="right">df</th>
-<th align="right">p</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Fixed: Untimed vs Deadline</td>
-<td align="right">145.03</td>
-<td align="right">15</td>
-<td align="right">0.00</td>
-</tr>
-<tr class="even">
-<td align="left">Random: Untimed vs Deadline</td>
-<td align="right">32.35</td>
-<td align="right">15</td>
-<td align="right">0.01</td>
-</tr>
-<tr class="odd">
-<td align="left">Untimed: Fixed vs Random</td>
-<td align="right">27.54</td>
-<td align="right">15</td>
-<td align="right">0.02</td>
-</tr>
-<tr class="even">
-<td align="left">Deadline: Fixed vs Random</td>
-<td align="right">330.69</td>
-<td align="right">15</td>
-<td align="right">0.00</td>
-</tr>
-</tbody>
-</table>
-<!-- * We next ask whether the sequence of choices reflected the optimal order: What is the proportion of easy-task-first choices in each condition? Of easy-then-medium? Of easy-medium-then-hard? This provides an indication of how the order of responding deviates from optimal in each condition. The table presents the proportion of subjects responding with each order; the figure presents the frequency with which subjects respond with the easiest first RDK, easiest then medium, and so on. -->
-<ul>
-<li>How optimal were responses?</li>
-</ul>
-<p>The next analysis computed the distance between the selected order
-and the optimal order (easiest to very hard for that trial), which
-ranges between 0 (perfect match) and 6 (maximally distant), for 4
-options.</p>
-<p>What we want is the distance of the selected options from the optimal
-solutions, which is the edit distance (or number of discordant pairs)
-between orders. However, because a participant may run out of time,
-there may be missing values. To handle these values, for each trial, we
-find the orders which partially match the selected order and compute
-three the average distance of those possible orders and the optimal
-solution (<em>avg_distance</em>).</p>
-<p>The following figure compares the avg_distance between the fixed
-difficulty and random difficulty conditions as a function of deadline
-condition and phase. For each of these measures, lower values reflect
-respones which are closer to optimal.</p>
-<p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/plotData-1.png" width="672" style="display: block; margin: auto;" />
-# Selection model</p>
+<p>REPEATED MEASURES ANOVA</p>
+<p>Within Subjects Effects<br />
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Sum of Squares df Mean Square F p η²-p<br />
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Phase 5.572887e+7 1 5.572887e+7 341.4668515 &lt; .0000001
+0.7988148<br />
+Phase:condition 64377.81 1 64377.81 0.3944614 0.5316279 0.0045658<br />
+Residual 1.403557e+7 86 163204.34<br />
+Selection 1.078185e+7 3 3593950.57 45.9452023 &lt; .0000001
+0.3482143<br />
+Selection:condition 487719.47 3 162573.16 2.0783415 0.1035004
+0.0235965<br />
+Residual 2.018142e+7 258 78222.54<br />
+Phase:Selection 9302342.28 3 3100780.76 58.8153116 &lt; .0000001
+0.4061401<br />
+Phase:Selection:condition 340072.01 3 113357.34 2.1501511 0.0943745
+0.0243919<br />
+Residual 1.360192e+7 258 52720.64<br />
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Note. Type 3 Sums of Squares</p>
+<p>Between Subjects Effects<br />
+────────────────────────────────────────────────────────────────────────────────────────────
+Sum of Squares df Mean Square F p η²-p<br />
+────────────────────────────────────────────────────────────────────────────────────────────
+condition 10977.61 1 10977.61 0.02152052 0.8837132 0.0002502<br />
+Residual 4.386857e+7 86 510099.62<br />
+────────────────────────────────────────────────────────────────────────────────────────────
+Note. Type 3 Sums of Squares</p>
+<p>ASSUMPTIONS</p>
+<p>Tests of Sphericity<br />
+───────────────────────────────────────────────────────────────────────────────────────────
+Mauchly’s W p Greenhouse-Geisser ε Huynh-Feldt ε<br />
+───────────────────────────────────────────────────────────────────────────────────────────
+Phase 1.0000000 NaN ᵃ 1.0000000 1.0000000<br />
+Selection 0.2101701 &lt; .0000001 0.5263992 0.5345846<br />
+Phase:Selection 0.2846960 &lt; .0000001 0.5621699 0.5721756<br />
+───────────────────────────────────────────────────────────────────────────────────────────
+ᵃ The repeated measures has only two levels. The assumption of
+sphericity is always met when the repeated measures has only two
+levels.</p>
+<p>Homogeneity of Variances Test (Levene’s)<br />
+───────────────────────────────────────────────────────── F df1 df2
+p<br />
+───────────────────────────────────────────────────────── rt1_untimed
+1.74125011 1 86 0.1904827<br />
+rt2_untimed 0.33645910 1 86 0.5633969<br />
+rt3_untimed 0.26473123 1 86 0.6082080<br />
+rt4_untimed 1.45923731 1 86 0.2303629<br />
+rt1_deadline 0.01961117 1 86 0.8889559<br />
+rt2_deadline 0.77861357 1 86 0.3800253<br />
+rt3_deadline 0.24419282 1 86 0.6224540<br />
+rt4_deadline 0.01164603 1 86 0.9143131<br />
+─────────────────────────────────────────────────────────</p>
+</div>
+</div>
+<div id="selection-model" class="section level1">
+<h1>Selection model</h1>
 <p>We can treat each task selection as a probabilistic choice given by a
 Luce’s choice rule (Luce, 1959), where each task is represented by some
 strength, <span class="math inline">\(\nu\)</span>. The probability of
@@ -1217,88 +1283,6 @@ replacement). This probability of observing a specific selection order,
 \frac{\nu_{i_j}}{\sum_{i \in A_j} \nu_{i}}, \]</span></p>
 <p>where <span class="math inline">\(A_j\)</span> is the current choice
 set.</p>
-<p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/PLmodel-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="sampling-distribution-anlaysis" class="section level2">
-<h2>Sampling distribution anlaysis</h2>
-<p>In order to characterise performance, we examined three sampling
-distributions for comparison to our data. The first is the sampling
-distribution of edit distances from optimal assuming that orders are
-sampled uniformly at random. The second distribution assumes that the
-first choice was optimal but the remaining orders are sampled at random.
-Finally, the third distributions assumes that the first two choices are
-selected optimally but that the remaining are randomly selected. It is
-clear that the mode of the distribution moves from a distance of 3 to a
-distance of 0 as the sampling distribution summarises orders which
-better conform to optimality.</p>
-<p>To characterise the optimality of each condition at each point in the
-experiment, we first computed the ks-test statistic between the data
-(the average partial distance data) and the random order distribution
-and the first-two optimal distribution. Since smaller ks-statistics
-indicate a closer match between the distributions, we then took the
-ratio of the ks-statistics (random over first two-optimal). Values less
-than one indicate that the data are more consistent with random than
-optimal responding. Values greater than one indicate that the data are
-more consistent with optimal rather than random responding.</p>
-<p><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/sampling_dist-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/analysis_exp2b_avgTimelabelled_delay.Rmd/sampling_dist-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>This figure efficiently summarises the main result: responding is
-more optimal in the fixed deadline condition particularly during the
-last ten trials; in the random deadline conditions, responding was
-closer to a random sampling distribution than to an optimal sampling
-distribution.</p>
-</div>
-<div id="selection-choice-rts" class="section level2">
-<h2>Selection Choice RTs</h2>
-<table>
-<caption>Mean RTs for each scheduling selection</caption>
-<thead>
-<tr class="header">
-<th align="left">condition</th>
-<th align="left">phase</th>
-<th align="right">mrt_sel1</th>
-<th align="right">mrt_sel2</th>
-<th align="right">mrt_sel3</th>
-<th align="right">mrt_sel4</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">fixed</td>
-<td align="left">untimed</td>
-<td align="right">1578</td>
-<td align="right">1290</td>
-<td align="right">1074</td>
-<td align="right">1032</td>
-</tr>
-<tr class="even">
-<td align="left">fixed</td>
-<td align="left">deadline</td>
-<td align="right">664</td>
-<td align="right">659</td>
-<td align="right">641</td>
-<td align="right">590</td>
-</tr>
-<tr class="odd">
-<td align="left">random</td>
-<td align="left">untimed</td>
-<td align="right">1670</td>
-<td align="right">1256</td>
-<td align="right">1001</td>
-<td align="right">969</td>
-</tr>
-<tr class="even">
-<td align="left">random</td>
-<td align="left">deadline</td>
-<td align="right">686</td>
-<td align="right">677</td>
-<td align="right">653</td>
-<td align="right">600</td>
-</tr>
-</tbody>
-</table>
-<!-- ## Alternative response strategies -->
-<!-- An alternative possible strategy involves selecting RDKs based on spatial position. One salient strategy would be to start with a random RDK and then select the remaining tasks in clockwise and anti-clockwise order.  -->
-<!-- The following plot shows the distribution of participants' spatial strategy use. Higher proportions indicate responses which are more consistent with a spatial strategy. These figures indicate that most participants do not use a spatial strategy. when difficulty is maintained in a fixed location, two groups emerge under a deadline: those who do not use a spatial strategy, though there is a slightly higher frequency of spatial strategy use in the random condition. -->
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1308,71 +1292,69 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.1.3 (2022-03-10)
+<pre><code>R version 4.3.1 (2023-06-16 ucrt)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
-Running under: Windows 10 x64 (build 19042)
+Running under: Windows 10 x64 (build 19045)
 
 Matrix products: default
 
+
 locale:
-[1] LC_COLLATE=English_Australia.1252  LC_CTYPE=English_Australia.1252   
-[3] LC_MONETARY=English_Australia.1252 LC_NUMERIC=C                      
-[5] LC_TIME=English_Australia.1252    
+[1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8   
+[3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C                      
+[5] LC_TIME=English_Australia.utf8    
+
+time zone: Australia/Sydney
+tzcode source: internal
 
 attached base packages:
 [1] stats4    grid      stats     graphics  grDevices utils     datasets 
 [8] methods   base     
 
 other attached packages:
- [1] pmr_1.2.5.1       jpeg_0.1-9        rstatix_0.7.0     lme4_1.1-29      
- [5] Matrix_1.4-0      png_0.1-7         reshape2_1.4.4    knitr_1.38       
- [9] hrbrthemes_0.8.0  english_1.2-6     gtools_3.9.2      DescTools_0.99.45
-[13] forcats_0.5.1     stringr_1.4.0     dplyr_1.0.8       purrr_0.3.4      
-[17] readr_2.1.2       tidyr_1.2.0       tibble_3.1.6      ggplot2_3.3.5    
-[21] tidyverse_1.3.1   workflowr_1.7.0  
+ [1] statmod_1.5.0     betareg_3.2-0     jmv_2.4.9         pmr_1.2.5.1      
+ [5] jpeg_0.1-10       rstatix_0.7.2     lmerTest_3.1-3    lme4_1.1-34      
+ [9] Matrix_1.6-1.1    png_0.1-8         reshape2_1.4.4    knitr_1.44       
+[13] english_1.2-6     gtools_3.9.4      DescTools_0.99.50 lubridate_1.9.3  
+[17] forcats_1.0.0     stringr_1.5.0     dplyr_1.1.3       purrr_1.0.2      
+[21] readr_2.1.4       tidyr_1.3.0       tibble_3.2.1      ggplot2_3.4.3    
+[25] tidyverse_2.0.0   workflowr_1.7.1  
 
 loaded via a namespace (and not attached):
- [1] minqa_1.2.4       colorspace_2.0-3  ellipsis_0.3.2    class_7.3-20     
- [5] rprojroot_2.0.3   fs_1.5.2          gld_2.6.5         rstudioapi_0.13  
- [9] proxy_0.4-27      farver_2.1.0      fansi_1.0.3       mvtnorm_1.1-3    
-[13] lubridate_1.8.0   xml2_1.3.3        splines_4.1.3     extrafont_0.18   
-[17] rootSolve_1.8.2.3 jsonlite_1.8.0    nloptr_2.0.0      broom_0.8.0      
-[21] Rttf2pt1_1.3.10   dbplyr_2.1.1      compiler_4.1.3    httr_1.4.2       
-[25] backports_1.4.1   assertthat_0.2.1  fastmap_1.1.0     cli_3.2.0        
-[29] later_1.3.0       htmltools_0.5.2   tools_4.1.3       gtable_0.3.0     
-[33] glue_1.6.2        lmom_2.9          Rcpp_1.0.8.3      carData_3.0-5    
-[37] cellranger_1.1.0  jquerylib_0.1.4   vctrs_0.4.1       nlme_3.1-155     
-[41] extrafontdb_1.0   xfun_0.30         ps_1.6.0          rvest_1.0.2      
-[45] lifecycle_1.0.1   getPass_0.2-2     MASS_7.3-55       scales_1.2.0     
-[49] hms_1.1.1         promises_1.2.0.1  expm_0.999-6      yaml_2.3.5       
-[53] Exact_3.1         gdtools_0.2.4     sass_0.4.1        stringi_1.7.6    
-[57] highr_0.9         e1071_1.7-11      boot_1.3-28       rlang_1.0.2      
-[61] pkgconfig_2.0.3   systemfonts_1.0.4 evaluate_0.15     lattice_0.20-45  
-[65] labeling_0.4.2    processx_3.5.3    tidyselect_1.1.2  plyr_1.8.7       
-[69] magrittr_2.0.3    R6_2.5.1          generics_0.1.2    DBI_1.1.2        
-[73] pillar_1.7.0      haven_2.5.0       whisker_0.4       withr_2.5.0      
-[77] abind_1.4-5       modelr_0.1.8      crayon_1.5.1      car_3.0-12       
-[81] utf8_1.2.2        tzdb_0.3.0        rmarkdown_2.13    readxl_1.4.0     
-[85] data.table_1.14.2 callr_3.7.0       git2r_0.30.1      reprex_2.0.1     
-[89] digest_0.6.29     httpuv_1.6.5      munsell_0.5.0     bslib_0.3.1      </code></pre>
+ [1] gld_2.6.6           sandwich_3.0-2      readxl_1.4.3       
+ [4] rlang_1.1.1         magrittr_2.0.3      multcomp_1.4-25    
+ [7] git2r_0.32.0        e1071_1.7-13        compiler_4.3.1     
+[10] flexmix_2.3-19      getPass_0.2-2       callr_3.7.3        
+[13] vctrs_0.6.3         pkgconfig_2.0.3     fastmap_1.1.1      
+[16] backports_1.4.1     labeling_0.4.3      utf8_1.2.3         
+[19] promises_1.2.1      rmarkdown_2.25      tzdb_0.4.0         
+[22] ps_1.7.5            nloptr_2.0.3        modeltools_0.2-23  
+[25] xfun_0.40           cachem_1.0.8        jsonlite_1.8.7     
+[28] later_1.3.1         afex_1.3-0          parallel_4.3.1     
+[31] broom_1.0.5         R6_2.5.1            RColorBrewer_1.1-3 
+[34] bslib_0.5.1         stringi_1.7.12      car_3.1-2          
+[37] boot_1.3-28.1       estimability_1.4.1  lmtest_0.9-40      
+[40] jquerylib_0.1.4     cellranger_1.1.0    numDeriv_2016.8-1.1
+[43] Rcpp_1.0.11         zoo_1.8-12          base64enc_0.1-3    
+[46] nnet_7.3-19         httpuv_1.6.11       splines_4.3.1      
+[49] timechange_0.2.0    tidyselect_1.2.0    rstudioapi_0.15.0  
+[52] abind_1.4-5         yaml_2.3.7          codetools_0.2-19   
+[55] processx_3.8.2      lattice_0.21-8      plyr_1.8.9         
+[58] withr_2.5.1         coda_0.19-4         evaluate_0.22      
+[61] survival_3.5-5      proxy_0.4-27        pillar_1.9.0       
+[64] carData_3.0-5       whisker_0.4.1       generics_0.1.3     
+[67] rprojroot_2.0.3     hms_1.1.3           munsell_0.5.0      
+[70] scales_1.2.1        rootSolve_1.8.2.4   minqa_1.2.6        
+[73] xtable_1.8-4        jmvcore_2.4.7       class_7.3-22       
+[76] glue_1.6.2          emmeans_1.8.8       lmom_3.0           
+[79] tools_4.3.1         data.table_1.14.8   Exact_3.2          
+[82] fs_1.6.3            mvtnorm_1.2-3       colorspace_2.1-0   
+[85] nlme_3.1-162        Formula_1.2-5       cli_3.6.1          
+[88] fansi_1.0.4         expm_0.999-7        gtable_0.3.4       
+[91] sass_0.4.7          digest_0.6.33       TH.data_1.1-2      
+[94] farver_2.1.1        htmltools_0.5.6     lifecycle_1.0.3    
+[97] httr_1.4.7          MASS_7.3-60        </code></pre>
 </div>
-</div>
-</div>
-<div class="footnotes footnotes-end-of-document">
-<hr />
-<ol>
-<li id="fn1"><p>Throughout, we infer significance by examining whether 2
-<span class="math inline">\(\times\)</span> SE includes 0.<a
-href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>We compared three models: (1) a standard linear
-regression model with location condition, deadline, and their
-interaction as factors (BIC = 8111.44) ; (2) a multilevel regression
-model with an additional random intercept for each subject (BIC =
-7406.53); and (3) a multilevel regression with a random intercept and
-random deadline coefficient for each subject (BIC = 7123.13). The third
-model was preferred on a BIC basis; hence, we report the details of that
-model only.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-</ol>
 </div>
 
 
