@@ -160,7 +160,7 @@ final_n = rdkoutput$final_n
 avgTimeoutPerSubject=rdkoutput$avgTimeoutPerSubject
 ```
 
-After removing any participants who had less than chance accuracy on the easiest RDK indicating equipment problems or a misunderstanding of task directions, there were `r final_n$n[final_n$condition == "fixed"]` and `r final_n$n[final_n$condition == "random"]` in the fixed and random location conditions, respectively.
+After removing any participants who had less than chance accuracy on the easiest RDK indicating equipment problems or a misunderstanding of task directions, there were `r final_n$n[final_n$condition == "fixed_location_delay"]` and `r final_n$n[final_n$condition == "random_location_delay"]` in the fixed and random location conditions, respectively.
 
 ```{r task_completion, echo=FALSE, message=FALSE, warning=FALSE, results="hide"}
 taskStatsOutput = analyseRDKTaskCompletions(rdk, experimentName, outputfolder, printOutput = FALSE)
@@ -182,7 +182,7 @@ We first summarize performance by answering the following questions:
 
 * How many tasks are completed on average?
 
-Across both conditions, participants completed `r round(mean(avgCompletions$mean[avgCompletions$phase == "untimed"]),2)` tasks during the `r as.character(avgCompletions$Phase[1])` phase and `r round(mean(avgCompletions$mean[avgCompletions$Phase == "deadline"]),2)` tasks during the `r as.character(avgCompletions$Phase[2])` phase. 
+Across both conditions, participants completed `r round(mean(avgCompletions$mean[avgCompletions$phase == "untimed"]),2)` tasks during the `r as.character(avgCompletions$phase[1])` phase and `r round(mean(avgCompletions$mean[avgCompletions$phase == "deadline"]),2)` tasks during the `r as.character(avgCompletions$phase[2])` phase. 
 
 ## RDK performance
 
